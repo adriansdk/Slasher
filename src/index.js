@@ -162,8 +162,9 @@ function create() {
 function update() {
 
   // MOVEMENT 
-  
+
   if (cursors.left.isDown) {
+    console.log('left')
     player.setVelocityX(-80);
     if (cursors.shift.isDown) {
       player.setVelocityX(-150);
@@ -172,6 +173,7 @@ function update() {
     direction = 'west'
   }
   else if (cursors.right.isDown) {
+    console.log('right')
     player.setVelocityX(80);
     if (cursors.shift.isDown) {
       player.setVelocityX(150);
@@ -180,6 +182,7 @@ function update() {
     direction = 'east'
   }
   else if (cursors.up.isDown) {
+    console.log('up')
     player.setVelocityY(-80);
     if (cursors.shift.isDown) {
       player.setVelocityY(-150);
@@ -188,6 +191,7 @@ function update() {
     direction = 'north'
   }
   else if (cursors.down.isDown) {
+    console.log('down')
     player.setVelocityY(80);
     if (cursors.shift.isDown) {
       player.setVelocityY(150);
