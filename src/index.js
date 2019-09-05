@@ -35,7 +35,7 @@ var skeleton;
 
 
 function preload() {
-  this.load.image('sky', sky); 
+  this.load.image('sky', sky);
   this.load.spritesheet('dude', dude, { frameWidth: 84, frameHeight: 84 });
   this.load.spritesheet('zombie', zombieAsset, { frameWidth: 32, frameHeight: 64 });
   this.load.spritesheet('skeleton', skeletonAsset, { frameWidth: 32, frameHeight: 64 });
@@ -44,7 +44,7 @@ function preload() {
 }
 
 function create() {
-  
+
   // MAP
   var map = this.add.tilemap('myMap')
   var tiles = map.addTilesetImage('atlas', 'tiles');
@@ -52,35 +52,35 @@ function create() {
   var riverLayer = map.createStaticLayer("River", tiles, 0, 0);
   var topLayer = map.createStaticLayer("Top", tiles, 0, 0);
   var objectsLayer = map.createStaticLayer("Objects", tiles, 0, 0);
-  
-  riverLayer.setCollisionByProperty({collide:true})
-  topLayer.setCollisionByProperty({collide:true})
-  objectsLayer.setCollisionByProperty({collide:true})
-  
+
+  riverLayer.setCollisionByProperty({ collide: true })
+  topLayer.setCollisionByProperty({ collide: true })
+  objectsLayer.setCollisionByProperty({ collide: true })
+
   //PLAYER
   player = this.physics.add.sprite(100, 500, 'dude');
   player.setCollideWorldBounds(true);
   player.setScale(0.5)
-  
+
   this.physics.add.collider(player, riverLayer)
   this.physics.add.collider(player, topLayer)
   this.physics.add.collider(player, objectsLayer)
-  
+
   // NPCS
   zombie = this.physics.add.sprite(200, 300, 'zombie');
   zombie.setCollideWorldBounds(true);
   skeleton = this.physics.add.sprite(250, 300, 'skeleton');
   skeleton.setCollideWorldBounds(true);
-  
+
   //CAMERA
-  
+
   this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
   this.cameras.main.startFollow(player);
   this.cameras.main.setZoom(2.5);
-  this.physics.world.setBounds(0, 0 )
+  this.physics.world.setBounds(0, 0)
 
   //ANIMATIONS
-  
+
   this.anims.create({
     key: 'stoppedDown',
     frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
@@ -160,10 +160,12 @@ function create() {
 }
 
 function update() {
-  console.log('hey')
+
+  // MOVEMENT 
+  
   if (cursors.left.isDown) {
     player.setVelocityX(-80);
-    if(cursors.shift.isDown){
+    if (cursors.shift.isDown) {
       player.setVelocityX(-150);
     }
     player.anims.play('left', true);
@@ -171,7 +173,7 @@ function update() {
   }
   else if (cursors.right.isDown) {
     player.setVelocityX(80);
-    if(cursors.shift.isDown){
+    if (cursors.shift.isDown) {
       player.setVelocityX(150);
     }
     player.anims.play('right', true);
@@ -179,7 +181,7 @@ function update() {
   }
   else if (cursors.up.isDown) {
     player.setVelocityY(-80);
-    if(cursors.shift.isDown){
+    if (cursors.shift.isDown) {
       player.setVelocityY(-150);
     }
     player.anims.play('up', true);
@@ -187,7 +189,7 @@ function update() {
   }
   else if (cursors.down.isDown) {
     player.setVelocityY(80);
-    if(cursors.shift.isDown){
+    if (cursors.shift.isDown) {
       player.setVelocityY(150);
     }
     player.anims.play('down', true);
