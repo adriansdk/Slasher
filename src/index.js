@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import sky from "./assets/sky.png";
 import dude from "./assets/player.png";
-import zombieAsset from "./assets/monsters.png";
+import zombieAsset from "./assets/zombie.png";
 import skeletonAsset from "./assets/skeleton.png";
 import tilesAtlas from "./assets/map/atlas.png";
 
