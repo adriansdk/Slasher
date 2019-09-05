@@ -1,9 +1,10 @@
 import Phaser from "phaser";
-import sky from "./assets/sky.png";
-import dude from "./assets/player.png";
-import zombieAsset from "./assets/zombie.png";
-import skeletonAsset from "./assets/skeleton.png";
-import tilesAtlas from "./assets/map/atlas.png";
+import sky from "./assets/images/sky.png";
+import dude from "./assets/images/player.png";
+import zombieAsset from "./assets/images/zombie.png";
+import skeletonAsset from "./assets/images/skeleton.png";
+import tilesPack1 from "./assets/map/atlas.png";
+import tilesPack2 from "./assets/map/rpgAtlas.png";
 
 
 
@@ -12,11 +13,12 @@ var config = {
   type: Phaser.AUTO,
   width: 1000,
   height: 750,
+  pixelart: true,
   physics: {
     default: 'arcade',
     arcade: {
       gravity: 0,
-      debug: true
+      debug: false
     }
   },
   scene: {
@@ -39,7 +41,8 @@ function preload() {
   this.load.spritesheet('dude', dude, { frameWidth: 84, frameHeight: 84 });
   this.load.spritesheet('zombie', zombieAsset, { frameWidth: 32, frameHeight: 64 });
   this.load.spritesheet('skeleton', skeletonAsset, { frameWidth: 32, frameHeight: 64 });
-  this.load.image('tiles', tilesAtlas);
+  this.load.image('tiles', tilesPack1);
+  this.load.image('tiles2', tilesPack2);
   this.load.tilemapTiledJSON('myMap', 'src/assets/map/map.json');
 }
 
@@ -48,10 +51,11 @@ function create() {
   // MAP
   var map = this.add.tilemap('myMap')
   var tiles = map.addTilesetImage('atlas', 'tiles');
-  var bottomLayer = map.createStaticLayer("Bottom", tiles, 0, 0);
-  var riverLayer = map.createStaticLayer("River", tiles, 0, 0);
-  var topLayer = map.createStaticLayer("Top", tiles, 0, 0);
-  var objectsLayer = map.createStaticLayer("Objects", tiles, 0, 0);
+  var tiles2 = map.addTilesetImage('rpgAtlas', 'tiles2');
+  var bottomLayer = map.createStaticLayer("Bottom", [tiles, tiles2], 0, 0);
+  var riverLayer = map.createStaticLayer("River", [tiles, tiles2], 0, 0);
+  var topLayer = map.createStaticLayer("Top",  [tiles, tiles2], 0, 0);
+  var objectsLayer = map.createStaticLayer("Objects",  [tiles, tiles2], 0, 0);
 
   riverLayer.setCollisionByProperty({ collide: true })
   topLayer.setCollisionByProperty({ collide: true })
@@ -67,10 +71,10 @@ function create() {
   this.physics.add.collider(player, objectsLayer)
 
   // NPCS
-  zombie = this.physics.add.sprite(200, 300, 'zombie');
-  zombie.setCollideWorldBounds(true);
-  skeleton = this.physics.add.sprite(250, 300, 'skeleton');
-  skeleton.setCollideWorldBounds(true);
+  // zombie = this.physics.add.sprite(200, 300, 'zombie');
+  // zombie.setCollideWorldBounds(true);
+  // skeleton = this.physics.add.sprite(250, 300, 'skeleton');
+  // skeleton.setCollideWorldBounds(true);
 
   //CAMERA
 
