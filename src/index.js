@@ -78,6 +78,8 @@ function create() {
   this.cameras.main.startFollow(player);
   this.cameras.main.setZoom(2.5);
   this.physics.world.setBounds(0, 0 )
+
+  //ANIMATIONS
   
   this.anims.create({
     key: 'stoppedDown',
