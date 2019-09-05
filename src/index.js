@@ -1,16 +1,17 @@
 import Phaser from "phaser";
 import sky from "./assets/sky.png";
 import dude from "./assets/player.png";
-import ground from "./assets/platform.png"
-import star from "./assets/star.png"
+import zombieAsset from "./assets/monsters.png";
+import skeletonAsset from "./assets/skeleton.png";
+import tilesAtlas from "./assets/map/atlas.png";
+
 
 
 
 var config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
-  pixelart:true,
+  width: 1000,
+  height: 750,
   physics: {
     default: 'arcade',
     arcade: {
@@ -29,19 +30,57 @@ var game = new Phaser.Game(config);
 var player;
 var cursors;
 var direction;
+var zombie;
+var skeleton;
+
 
 function preload() {
-  this.load.image('sky', sky);
-  this.load.image('ground', ground);
-  this.load.image('star', star);
+  this.load.image('sky', sky); 
   this.load.spritesheet('dude', dude, { frameWidth: 84, frameHeight: 84 });
+  this.load.spritesheet('zombie', zombieAsset, { frameWidth: 32, frameHeight: 64 });
+  this.load.spritesheet('skeleton', skeletonAsset, { frameWidth: 32, frameHeight: 64 });
+  this.load.image('tiles', tilesAtlas);
+  this.load.tilemapTiledJSON('myMap', 'src/assets/map/map.json');
 }
 
 function create() {
-  this.add.image(400, 300, 'sky');
-  player = this.physics.add.sprite(100, 450, 'dude');
+  
+  // MAP
+  var map = this.add.tilemap('myMap')
+  var tiles = map.addTilesetImage('atlas', 'tiles');
+  var bottomLayer = map.createStaticLayer("Bottom", tiles, 0, 0);
+  var middleLayer = map.createStaticLayer("Middle", tiles, 0, 0);
+  var topLayer = map.createStaticLayer("Top", tiles, 0, 0);
+  var objectsLayer = map.createStaticLayer("Objects", tiles, 0, 0);
+  
+  bottomLayer.setCollisionByProperty({collide:true})
+  middleLayer.setCollisionByProperty({collide:true})
+  topLayer.setCollisionByProperty({collide:true})
+  objectsLayer.setCollisionByProperty({collide:true})
+  
+  //PLAYER
+  player = this.physics.add.sprite(100, 500, 'dude');
   player.setCollideWorldBounds(true);
-
+  player.setScale(0.3)
+  
+  this.physics.add.collider(player, bottomLayer)
+  this.physics.add.collider(player, middleLayer)
+  this.physics.add.collider(player, topLayer)
+  this.physics.add.collider(player, objectsLayer)
+  
+  // NPCS
+  zombie = this.physics.add.sprite(200, 300, 'zombie');
+  zombie.setCollideWorldBounds(true);
+  skeleton = this.physics.add.sprite(250, 300, 'skeleton');
+  skeleton.setCollideWorldBounds(true);
+  
+  //CAMERA
+  
+  this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+  this.cameras.main.startFollow(player);
+  this.cameras.main.setZoom(3.5);
+  this.physics.world.setBounds(0, 0 )
+  
   this.anims.create({
     key: 'stoppedDown',
     frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
@@ -118,40 +157,38 @@ function create() {
   });
 
   cursors = this.input.keyboard.createCursorKeys();
-
-
-
 }
 
 function update() {
+  console.log('hey')
   if (cursors.left.isDown) {
-    player.setVelocityX(-160);
+    player.setVelocityX(-80);
     if(cursors.shift.isDown){
-      player.setVelocityX(-300);
+      player.setVelocityX(-150);
     }
     player.anims.play('left', true);
     direction = 'west'
   }
   else if (cursors.right.isDown) {
-    player.setVelocityX(160);
+    player.setVelocityX(80);
     if(cursors.shift.isDown){
-      player.setVelocityX(300);
+      player.setVelocityX(150);
     }
     player.anims.play('right', true);
     direction = 'east'
   }
   else if (cursors.up.isDown) {
-    player.setVelocityY(-160);
+    player.setVelocityY(-80);
     if(cursors.shift.isDown){
-      player.setVelocityY(-300);
+      player.setVelocityY(-150);
     }
     player.anims.play('up', true);
     direction = 'north'
   }
   else if (cursors.down.isDown) {
-    player.setVelocityY(160);
+    player.setVelocityY(80);
     if(cursors.shift.isDown){
-      player.setVelocityY(300);
+      player.setVelocityY(150);
     }
     player.anims.play('down', true);
     direction = 'south'
