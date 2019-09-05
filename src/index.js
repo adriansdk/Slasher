@@ -49,22 +49,20 @@ function create() {
   var map = this.add.tilemap('myMap')
   var tiles = map.addTilesetImage('atlas', 'tiles');
   var bottomLayer = map.createStaticLayer("Bottom", tiles, 0, 0);
-  var middleLayer = map.createStaticLayer("Middle", tiles, 0, 0);
+  var riverLayer = map.createStaticLayer("River", tiles, 0, 0);
   var topLayer = map.createStaticLayer("Top", tiles, 0, 0);
   var objectsLayer = map.createStaticLayer("Objects", tiles, 0, 0);
   
-  bottomLayer.setCollisionByProperty({collide:true})
-  middleLayer.setCollisionByProperty({collide:true})
+  riverLayer.setCollisionByProperty({collide:true})
   topLayer.setCollisionByProperty({collide:true})
   objectsLayer.setCollisionByProperty({collide:true})
   
   //PLAYER
   player = this.physics.add.sprite(100, 500, 'dude');
   player.setCollideWorldBounds(true);
-  player.setScale(0.3)
+  player.setScale(0.5)
   
-  this.physics.add.collider(player, bottomLayer)
-  this.physics.add.collider(player, middleLayer)
+  this.physics.add.collider(player, riverLayer)
   this.physics.add.collider(player, topLayer)
   this.physics.add.collider(player, objectsLayer)
   
@@ -78,7 +76,7 @@ function create() {
   
   this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
   this.cameras.main.startFollow(player);
-  this.cameras.main.setZoom(3.5);
+  this.cameras.main.setZoom(2.5);
   this.physics.world.setBounds(0, 0 )
   
   this.anims.create({
