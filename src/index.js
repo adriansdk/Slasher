@@ -11,14 +11,14 @@ import tilesPack2 from "./assets/map/rpgAtlas.png";
 
 var config = {
   type: Phaser.AUTO,
-  width: 1000,
-  height: 750,
+  width: 900,
+  height: 600,
   pixelart: true,
   physics: {
     default: 'arcade',
     arcade: {
       gravity: 0,
-      debug: false
+      debug: true
     }
   },
   scene: {
@@ -41,13 +41,13 @@ function preload() {
   this.load.spritesheet('dude', dude, { frameWidth: 84, frameHeight: 84 });
   this.load.spritesheet('zombie', zombieAsset, { frameWidth: 32, frameHeight: 64 });
   this.load.spritesheet('skeleton', skeletonAsset, { frameWidth: 32, frameHeight: 64 });
-  this.load.image('tiles', tilesPack1);
+  this.load.image('tiles', tilesPack1);    
   this.load.image('tiles2', tilesPack2);
   this.load.tilemapTiledJSON('myMap', 'src/assets/map/map.json');
 }
 
 function create() {
-
+ 
   // MAP
   var map = this.add.tilemap('myMap')
   var tiles = map.addTilesetImage('atlas', 'tiles');
@@ -55,7 +55,7 @@ function create() {
   var bottomLayer = map.createStaticLayer("Bottom", [tiles, tiles2], 0, 0);
   var riverLayer = map.createStaticLayer("River", [tiles, tiles2], 0, 0);
   var topLayer = map.createStaticLayer("Top",  [tiles, tiles2], 0, 0);
-  var objectsLayer = map.createStaticLayer("Objects",  [tiles, tiles2], 0, 0);
+  var objectsLayer = map.createStaticLayer("Objects",  [tiles, tiles2], 0, 0).setDepth(1)
 
   riverLayer.setCollisionByProperty({ collide: true })
   topLayer.setCollisionByProperty({ collide: true })
@@ -64,23 +64,25 @@ function create() {
   //PLAYER
   player = this.physics.add.sprite(100, 500, 'dude');
   player.setCollideWorldBounds(true);
-  player.setScale(0.5)
+  player.setScale(0.55)
+  player.setSize(60, 80, false)
+
 
   this.physics.add.collider(player, riverLayer)
   this.physics.add.collider(player, topLayer)
   this.physics.add.collider(player, objectsLayer)
 
   // NPCS
-  // zombie = this.physics.add.sprite(200, 300, 'zombie');
-  // zombie.setCollideWorldBounds(true);
-  // skeleton = this.physics.add.sprite(250, 300, 'skeleton');
-  // skeleton.setCollideWorldBounds(true);
+  zombie = this.physics.add.sprite(200, 300, 'zombie').setScale(0.6);
+  zombie.setCollideWorldBounds(true);
+  skeleton = this.physics.add.sprite(250, 300, 'skeleton').setScale(0.6);
+  skeleton.setCollideWorldBounds(true);
 
   //CAMERA
 
   this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
   this.cameras.main.startFollow(player);
-  this.cameras.main.setZoom(2.5);
+  this.cameras.main.setZoom(2.2);
   this.physics.world.setBounds(0, 0)
 
   //ANIMATIONS
