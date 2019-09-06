@@ -1,4 +1,8 @@
 import Phaser from "phaser";
+
+
+// IMPORTING ASSETS
+
 import sky from "./assets/images/sky.png";
 import dude from "./assets/images/player.png";
 import zombieAsset from "./assets/images/zombie.png";
@@ -65,7 +69,7 @@ function create() {
   player = this.physics.add.sprite(100, 500, 'dude');
   player.setCollideWorldBounds(true);
   player.setScale(0.55)
-  player.setSize(60, 80, false)
+  player.body.setSize(54, 76).setOffset(14, 6)
 
 
   this.physics.add.collider(player, riverLayer)
@@ -172,7 +176,7 @@ function update() {
   if (cursors.left.isDown) {
     console.log('left')
     player.setVelocityX(-80);
-    if (cursors.shift.isDown) {
+    if (cursors.shift.isDown) {  
       player.setVelocityX(-150);
     }
     player.anims.play('left', true);
@@ -218,18 +222,21 @@ function update() {
       player.anims.play('attackLeft', true)
     }
   }
-
-  else {
+  
     player.setVelocityX(0);
     player.setVelocityY(0);
     if (direction == 'north') {
       player.anims.play('stoppedUp', true);
+      // player.body.setSize(54, 76).setOffset(14, 6)
     } else if (direction == 'south') {
       player.anims.play('stoppedDown', true)
+      // player.body.setSize(54, 76).setOffset(14, 6)
     } else if (direction == 'east') {
       player.anims.play('stoppedRight', true)
+      // player.body.setSize(54, 76).setOffset(14, 6)
     } else if (direction == 'west') {
       player.anims.play('stoppedLeft', true)
+      // player.body.setSize(54, 76).setOffset(14, 6)
     }
   };
 
