@@ -45,21 +45,21 @@ function preload() {
   this.load.spritesheet('dude', dude, { frameWidth: 84, frameHeight: 84 });
   this.load.spritesheet('zombie', zombieAsset, { frameWidth: 32, frameHeight: 64 });
   this.load.spritesheet('skeleton', skeletonAsset, { frameWidth: 32, frameHeight: 64 });
-  this.load.image('tiles', tilesPack1);    
+  this.load.image('tiles', tilesPack1);
   this.load.image('tiles2', tilesPack2);
   this.load.tilemapTiledJSON('myMap', 'src/assets/map/map.json');
 }
 
 function create() {
- 
+
   // MAP
   var map = this.add.tilemap('myMap')
   var tiles = map.addTilesetImage('atlas', 'tiles');
   var tiles2 = map.addTilesetImage('rpgAtlas', 'tiles2');
   var bottomLayer = map.createStaticLayer("Bottom", [tiles, tiles2], 0, 0);
   var riverLayer = map.createStaticLayer("River", [tiles, tiles2], 0, 0);
-  var topLayer = map.createStaticLayer("Top",  [tiles, tiles2], 0, 0);
-  var objectsLayer = map.createStaticLayer("Objects",  [tiles, tiles2], 0, 0).setDepth(1)
+  var topLayer = map.createStaticLayer("Top", [tiles, tiles2], 0, 0);
+  var objectsLayer = map.createStaticLayer("Objects", [tiles, tiles2], 0, 0).setDepth(1)
 
   riverLayer.setCollisionByProperty({ collide: true })
   topLayer.setCollisionByProperty({ collide: true })
@@ -176,7 +176,7 @@ function update() {
   if (cursors.left.isDown) {
     console.log('left')
     player.setVelocityX(-80);
-    if (cursors.shift.isDown) {  
+    if (cursors.shift.isDown) {
       player.setVelocityX(-150);
     }
     player.anims.play('left', true);
@@ -221,8 +221,7 @@ function update() {
     } else if (direction == 'west') {
       player.anims.play('attackLeft', true)
     }
-  }
-  
+  } else {
     player.setVelocityX(0);
     player.setVelocityY(0);
     if (direction == 'north') {
@@ -238,6 +237,8 @@ function update() {
       player.anims.play('stoppedLeft', true)
       // player.body.setSize(54, 76).setOffset(14, 6)
     }
-  };
 
-}
+  }
+};
+
+
