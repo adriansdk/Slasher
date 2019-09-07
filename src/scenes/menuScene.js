@@ -1,15 +1,19 @@
 import logo from "../assets/images/logo.png";
 import background from "../assets/images/background.png";
+// import myFont from '../assets/images/font.TTF';
 
 var animation;
+var button;
+var startButton;
 
-class menuScene extends Phaser.Scene { 
+class menuScene extends Phaser.Scene {
     constructor() {
         super({ key: "menuScene" });
     }
 
     preload() {
         this.load.image('logo', logo);
+        // this.load.text('myFont', myFont)
         this.load.spritesheet('background', background, { frameWidth: 1177, frameHeight: 784 });
     }
 
@@ -33,7 +37,23 @@ class menuScene extends Phaser.Scene {
             .on("animationcomplete", onAnimationcomplete);
         // animation = this.add.sprite(450, 300, 'background').play('background').setScale(0.78);
         // animation.animationcomplete(chain('background2'))
-        this.add.image(450, 230, 'logo').setScale(0.2);   
+        this.add.image(450, 230, 'logo').setScale(0.2);
+        let startButton = this.add.text(410, 500, "Start", {
+            fontFamily: "Roboto",
+            fontSize: 45
+        });
+        startButton.alpha = 0.5;
+        startButton.setInteractive().on("pointerover", () => {
+            document.body.style.cursor = "pointer";
+            startButton.alpha = 1;
+        }).on("pointerout", () => {
+            document.body.style.cursor = "auto";
+            startButton.alpha = 0.5;
+        }).on("pointerdown", () => {
+            document.body.style.cursor = "auto";
+            this.scene.start("gameScene");
+        });
+
     }
 
     createAnims() {
