@@ -1,6 +1,6 @@
 import logo from "../assets/images/logo.png";
 import background from "../assets/images/background.png";
-// import myFont from '../assets/images/font.TTF';
+// import font1 from '../assets/images/font.TTF';
 
 var animation;
 var button;
@@ -19,9 +19,7 @@ class menuScene extends Phaser.Scene {
 
     create() {
         this.createAnims.call(this);
-
         var anims = ["background", "background2"];
-
         var onAnimationcomplete = function (anim) {
             console.log("animationcomplete", anim.key);
             var next = anims.shift();
@@ -31,15 +29,10 @@ class menuScene extends Phaser.Scene {
                 this.off("animationcomplete", onAnimationcomplete);
             }
         };
-
-        this.add.sprite(450, 300, "background").setScale(0.78)
-            .play(anims.shift())
-            .on("animationcomplete", onAnimationcomplete);
-        // animation = this.add.sprite(450, 300, 'background').play('background').setScale(0.78);
-        // animation.animationcomplete(chain('background2'))
+        this.add.sprite(450, 300, "background").setScale(0.78).play(anims.shift()).on("animationcomplete", onAnimationcomplete);
         this.add.image(450, 230, 'logo').setScale(0.2);
         let startButton = this.add.text(410, 500, "Start", {
-            fontFamily: "Roboto",
+            fontFamily: "font1",
             fontSize: 45
         });
         startButton.alpha = 0.5;

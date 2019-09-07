@@ -11,6 +11,7 @@ import zombieAsset from "../assets/images/zombie.png";
 import skeletonAsset from "../assets/images/skeleton.png";
 import tilesPack1 from "../assets/map/atlas.png";
 import tilesPack2 from "../assets/map/rpgAtlas.png";
+import tilesPack3 from "../assets/map/roguelike.png";
 
 class gameScene extends Phaser.Scene {
     constructor() {
@@ -23,6 +24,7 @@ class gameScene extends Phaser.Scene {
         this.load.spritesheet('skeleton', skeletonAsset, { frameWidth: 32, frameHeight: 64 });
         this.load.image('tiles', tilesPack1);
         this.load.image('tiles2', tilesPack2);
+        this.load.image('tiles3', tilesPack3);
         this.load.tilemapTiledJSON('myMap', 'src/assets/map/map.json');
     }
 
@@ -31,10 +33,11 @@ class gameScene extends Phaser.Scene {
         var map = this.add.tilemap('myMap')
         var tiles = map.addTilesetImage('atlas', 'tiles');
         var tiles2 = map.addTilesetImage('rpgAtlas', 'tiles2');
-        var bottomLayer = map.createStaticLayer("Bottom", [tiles, tiles2], 0, 0);
-        var riverLayer = map.createStaticLayer("River", [tiles, tiles2], 0, 0);
-        var topLayer = map.createStaticLayer("Top", [tiles, tiles2], 0, 0);
-        var objectsLayer = map.createStaticLayer("Objects", [tiles, tiles2], 0, 0).setDepth(1)
+        var tiles3 = map.addTilesetImage('roguelike', 'tiles3');
+        var bottomLayer = map.createStaticLayer("Bottom", [tiles, tiles2, tiles3], 0, 0);
+        var riverLayer = map.createStaticLayer("River", [tiles, tiles, tiles3], 0, 0);
+        var topLayer = map.createStaticLayer("Top", [tiles, tiles2, tiles3], 0, 0);
+        var objectsLayer = map.createStaticLayer("Objects", [tiles, tiles2, tiles3], 0, 0).setDepth(1)
 
         riverLayer.setCollisionByProperty({ collide: true })
         topLayer.setCollisionByProperty({ collide: true })

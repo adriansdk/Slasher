@@ -1,6 +1,7 @@
 body{
     margin: 0px;
     padding: 0px;
+    /* background-color: #081510; */
 }
 h1{
     color:red;
@@ -10,3 +11,10 @@ h1{
 h3{
     margin: 0px;
 }
+
+@font-face {
+    font-family: font1;
+    src: url('./src/assets/images/font.TTF');
+    font-weight:400;
+    font-weight:normal;
+  }
