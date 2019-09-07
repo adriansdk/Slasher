@@ -7,7 +7,7 @@ var skeleton;
 
 import sky from "../assets/images/sky.png";
 import dude from "../assets/images/player.png";
-import zombieAsset from "../assets/images/zombie.png";
+import zombieAsset from "../assets/images/zombie.png";   
 import skeletonAsset from "../assets/images/skeleton.png";
 import tilesPack1 from "../assets/map/atlas.png";
 import tilesPack2 from "../assets/map/rpgAtlas.png";
