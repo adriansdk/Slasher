@@ -3,7 +3,7 @@ var direction;
 var zombie;
 var skeleton;
 
-
+import { cst } from "../cst"
 import sky from "../assets/images/sky.png";
 import dude from "../assets/images/player.png";
 import zombieAsset from "../assets/images/zombie.png";
@@ -12,9 +12,9 @@ import tilesPack1 from "../assets/map/atlas.png";
 import tilesPack2 from "../assets/map/rpgAtlas.png";
 import tilesPack3 from "../assets/map/roguelike.png";
 
-class gameScene extends Phaser.Scene {
+export default class gameScene extends Phaser.Scene {
     constructor() {
-        super({ key: 'gameScene' });
+        super({ key: cst.scenes.game });
         this.player;
     }
 
@@ -26,7 +26,7 @@ class gameScene extends Phaser.Scene {
         this.load.image('tiles', tilesPack1);
         this.load.image('tiles2', tilesPack2);
         this.load.image('tiles3', tilesPack3);
-        this.load.tilemapTiledJSON('myMap', 'src/assets/map/map2.json');
+        this.load.tilemapTiledJSON('myMap', 'src/assets/map/map.json');
     }
 
     create() {
@@ -249,4 +249,4 @@ class gameScene extends Phaser.Scene {
     }
 }
 
-export default gameScene
+

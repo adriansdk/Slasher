@@ -1,3 +1,4 @@
+import { cst } from "../cst"
 import logo from "../assets/images/logo.png";
 import background from "../assets/images/background.png";
 
@@ -7,7 +8,7 @@ var startButton;
 
 export default class menuScene extends Phaser.Scene {
     constructor() {
-        super({ key: "menuScene" });
+        super({ key: cst.scenes.menu });
     }
 
     preload() {

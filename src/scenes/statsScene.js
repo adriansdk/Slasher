@@ -1,10 +1,10 @@
-import gameScene from "./gameScene"
+import { cst } from "../cst"
 
 
 class statsScene extends Phaser.Scene {
     
     constructor() {
-        super({ key: 'statsScene'});
+        super({ key: cst.scenes.stats});
     }
 
     preload() {

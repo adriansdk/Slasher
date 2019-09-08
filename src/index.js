@@ -1,7 +1,7 @@
 import Phaser from "phaser";
-import gameScene from "../src/scenes/gameScene"
+import gameScene from "./scenes/gameScene"
 import stats from "./scenes/statsScene"
-import menuScene from "../src/scenes/menuScene"
+import menuScene from "./scenes/menuScene"
 
 var config = {
   type: Phaser.AUTO,
