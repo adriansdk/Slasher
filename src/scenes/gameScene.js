@@ -1,6 +1,8 @@
 var cursors;
 var direction;
 var damageTaken;
+var colliding;
+var distance;
 
 var Player = {
     name: 'Adrian',
@@ -8,11 +10,12 @@ var Player = {
     exp: 0,
     expToLevel: 100,
     gold: 0,
+    damage: 5,
 }
 
 var Enemies = {
     zombie: {
-        name:'Zombie',
+        name: 'Zombie',
         hp: 50,
         damage: 4,
         exp: 12,
@@ -71,14 +74,22 @@ export default class gameScene extends Phaser.Scene {
         this.physics.add.collider(this.player, riverLayer)
         this.physics.add.collider(this.player, topLayer)
         this.physics.add.collider(this.player, objectsLayer)
-        // console.log(this.player)
+        direction = 'south'
+        var eae = this.player.body.touching
+        console.log(eae)
 
         // NPCS
         this.zombie = this.physics.add.sprite(200, 500, 'zombie').setScale(0.6);
-        this.zombie.setCollideWorldBounds(true);
-    
+        this.zombie.setCollideWorldBounds(true).setImmovable(true);
+        this.zombie.body.setSize(36, 40).setOffset(0, 27)
+
         // skeleton = this.physics.add.sprite(250, 300, 'skeleton').setScale(0.6);
         // skeleton.setCollideWorldBounds(true);
+
+        //COLLIDERS 
+
+        this.physics.add.collider(this.player, this.zombie)
+        colliding = false
 
         //CAMERA
 
@@ -164,103 +175,105 @@ export default class gameScene extends Phaser.Scene {
             repeat: -1
         });
         cursors = this.input.keyboard.createCursorKeys();
-
-
-
-
-        
     }
-    takeDamage() {
-        Player.hp = Player.hp - damageTaken
-        console.log(Player.hp)
-    }
-    updateData(){
+
+    updateData() {
         this.player.setData('name', Player.name)
         this.player.setData('health', `${Player.hp}`)
         this.player.setData('exp', `${Player.exp}`)
         this.player.setData('expToLevel', `${Player.expToLevel}`)
         this.player.setData('gold', `${Player.gold}`)
-            // ENEMIES DATA
+        // ENEMIES DATA
         this.zombie.setData('name', Enemies.zombie.name)
         this.zombie.setData('health', `${Enemies.zombie.hp}`)
         this.zombie.setData('damage', `${Enemies.zombie.damage}`)
         this.zombie.setData('exp', `${Enemies.zombie.exp}`)
         this.zombie.setData('gold', `${Enemies.zombie.gold}`)
     }
-    update() {
-        
-        this.updateData();
-        
-            // STARTING UI SCENES
-        this.scene.launch('statsScene', this.player)
-        this.scene.launch('currentEnemy', this.zombie)
-        
-        // MOVEMENT 
+    moveCharacter() {
         if (cursors.left.isDown) {
-            console.log('left')
+            this.player.anims.play('left', true);
             this.player.setVelocityX(-80);
+            direction = 'west'
             if (cursors.shift.isDown) {
                 this.player.setVelocityX(-150);
             }
-            this.player.anims.play('left', true);
-            direction = 'west'
-        }
-        else if (cursors.right.isDown) {
-            console.log('right')
+        } else if (cursors.right.isDown) {
+            this.player.anims.play('right', true);
             this.player.setVelocityX(80);
+            direction = 'east'
             if (cursors.shift.isDown) {
                 this.player.setVelocityX(150);
             }
-            this.player.anims.play('right', true);
-            direction = 'east'
-        }
-        else if (cursors.up.isDown) {
-            console.log('up')
+        } else if (cursors.up.isDown) {
+            this.player.anims.play('up', true);
             this.player.setVelocityY(-80);
+            direction = 'north'
             if (cursors.shift.isDown) {
                 this.player.setVelocityY(-150);
             }
-            this.player.anims.play('up', true);
-            direction = 'north'
-        }
-        else if (cursors.down.isDown) {
-            console.log('down')
+        } else if (cursors.down.isDown) {
+            this.player.anims.play('down', true);
             this.player.setVelocityY(80);
+            direction = 'south'
             if (cursors.shift.isDown) {
                 this.player.setVelocityY(150);
             }
-            this.player.anims.play('down', true);
-            direction = 'south'
-        }
-        else if (cursors.space.isDown) {
-            this.player.setVelocityY(0);
-            this.player.setVelocityX(0);
-            if (direction == 'north') {
-                this.player.anims.play('attackUp', true);
-            } else if (direction == 'south') {
-                this.player.anims.play('attackDown', true)
-            } else if (direction == 'east') {
-                this.player.anims.play('attackRight', true)
-            } else if (direction == 'west') {
-                this.player.anims.play('attackLeft', true)
-            }
-        } else {
+        } else if (cursors.space.isUp) {
             this.player.setVelocityX(0);
             this.player.setVelocityY(0);
             if (direction == 'north') {
                 this.player.anims.play('stoppedUp', true);
-                // this.player.body.setSize(54, 76).setOffset(14, 6)
             } else if (direction == 'south') {
                 this.player.anims.play('stoppedDown', true)
-                // this.player.body.setSize(54, 76).setOffset(14, 6)
             } else if (direction == 'east') {
                 this.player.anims.play('stoppedRight', true)
-                // this.player.body.setSize(54, 76).setOffset(14, 6)
             } else if (direction == 'west') {
                 this.player.anims.play('stoppedLeft', true)
-                // this.player.body.setSize(54, 76).setOffset(14, 6)
             }
         }
+    }
+    playerAttack() {
+        if (cursors.space.isDown) {
+            this.player.setVelocityY(0);
+            this.player.setVelocityX(0);
+            if (direction == 'north' && cursors.space.isDown) {
+                this.player.anims.play('attackUp', true);
+                if (this.zombie.y < this.player.y && distance < 50) {
+                    Enemies.zombie.hp -= Player.damage
+                }
+            } else if (direction == 'south') {
+                this.player.anims.play('attackDown', true)
+                if (this.zombie.y > this.player.y && distance < 50) {
+                    Enemies.zombie.hp -= Player.damage
+                }
+            } else if (direction == 'east') {
+                this.player.anims.play('attackRight', true)
+                if (this.zombie.x > this.player.x && distance < 50) {
+                    Enemies.zombie.hp -= Player.damage
+                }
+            } else if (direction == 'west') {
+                this.player.anims.play('attackLeft', true)
+                if (this.zombie.x < this.player.x && distance < 50) {
+                    Enemies.zombie.hp -= Player.damage
+                }
+            }
+        }
+    }
+    update() {
+
+        //FUNCTIONS RUNNING AT ALL TIMES
+
+        this.updateData();
+        this.moveCharacter();
+        this.playerAttack();
+        // STARTING UI SCENES
+        this.scene.launch('statsScene', this.player)
+        this.scene.launch('currentEnemy', this.zombie)
+
+
+        distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.zombie.x, this.zombie.y)
+        //CHECK IF COLLIDING WITH MOBS        
     }
 }
 
