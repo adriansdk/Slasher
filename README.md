@@ -11,5 +11,5 @@
 
 **Assetss artists**: 
 
-[Kenney] (https://www.kenney.nl/assets/roguelike-modern-city).
+[Kenney](https://www.kenney.nl/assets/roguelike-modern-city).
 
