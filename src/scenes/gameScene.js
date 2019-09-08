@@ -1,7 +1,14 @@
 var cursors;
 var direction;
-var zombie;
-var skeleton;
+var damageTaken;
+
+var Player = {
+    name: 'Adrian',
+    hp: 100,
+    exp: 0,
+    expToLevel: 100,
+    gold: 0,
+}
 
 import { cst } from "../cst"
 import sky from "../assets/images/sky.png";
@@ -16,6 +23,7 @@ export default class gameScene extends Phaser.Scene {
     constructor() {
         super({ key: cst.scenes.game });
         this.player;
+        this.zombie;
     }
 
     preload() {
@@ -30,8 +38,6 @@ export default class gameScene extends Phaser.Scene {
     }
 
     create() {
-
-
         // MAP
         var map = this.add.tilemap('myMap')
         var tiles = map.addTilesetImage('atlas', 'tiles');
@@ -52,32 +58,25 @@ export default class gameScene extends Phaser.Scene {
         this.player.setScale(0.55)
         this.player.body.setSize(44, 70).setOffset(18, 12)
 
-
-        this.player.setData('name', 'Adrian')
-        this.player.setData('health', 100)
-        this.player.setData('xp', 0)
-        this.player.setData('gold', 0)
-
-
-
         this.physics.add.collider(this.player, riverLayer)
         this.physics.add.collider(this.player, topLayer)
         this.physics.add.collider(this.player, objectsLayer)
         // console.log(this.player)
 
         // NPCS
-        zombie = this.physics.add.sprite(200, 500, 'zombie').setScale(0.6);
-        zombie.setCollideWorldBounds(true);
+        this.zombie = this.physics.add.sprite(200, 500, 'zombie').setScale(0.6);
+        this.zombie.setCollideWorldBounds(true);
 
-        zombie.setData('name', 'Zombie')
-        zombie.setData('health', 50)
-        zombie.setData('xp', 10)
-        zombie.setData('gold', 3)
+        this.zombie.setData('name', 'Zombie')
+        this.zombie.setData('health', 50)
+        this.zombie.setData('xp', 10)
+        this.zombie.setData('gold', 3)
+        
+        damageTaken = 10
 
 
-
-        skeleton = this.physics.add.sprite(250, 300, 'skeleton').setScale(0.6);
-        skeleton.setCollideWorldBounds(true);
+        // skeleton = this.physics.add.sprite(250, 300, 'skeleton').setScale(0.6);
+        // skeleton.setCollideWorldBounds(true);
 
         //CAMERA
 
@@ -167,13 +166,25 @@ export default class gameScene extends Phaser.Scene {
 
 
 
-        this.scene.launch('statsScene', this.player)
-
+        
     }
     takeDamage() {
-
+        Player.hp = Player.hp - damageTaken
+        console.log(Player.hp)
     }
     update() {
+
+        // STARTING OTHER SCENES AND PASSING DATA TO THEM
+
+        this.player.setData('name', Player.name)
+        this.player.setData('health', `${Player.hp}`)
+        this.player.setData('xp', `${Player.exp}`)
+        this.player.setData('xp', `${Player.expToLevel}`)
+        this.player.setData('gold', `${Player.gold}`)
+
+        this.scene.launch('statsScene', this.player)
+        this.scene.launch('currentEnemy', this.zombie)
+
         // MOVEMENT 
         
 

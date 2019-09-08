@@ -3,5 +3,6 @@ export const cst = {
         game: "gameScene",
         menu: "menuScene",
         stats: "statsScene",
+        enemyStats: "currentEnemy"
     }
 }
