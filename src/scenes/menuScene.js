@@ -29,7 +29,7 @@ class menuScene extends Phaser.Scene {
                 this.off("animationcomplete", onAnimationcomplete);
             }
         };
-        this.add.sprite(450, 300, "background").setScale(0.78).play(anims.shift()).on("animationcomplete", onAnimationcomplete);
+        this.add.sprite(450, 300, "background").setScale(0.79).play(anims.shift()).on("animationcomplete", onAnimationcomplete);
         this.add.image(450, 230, 'logo').setScale(0.2);
         let startButton = this.add.text(410, 500, "Start", {
             fontFamily: "font1",
@@ -59,7 +59,7 @@ class menuScene extends Phaser.Scene {
         this.anims.create({
             key: 'background2',
             frames: this.anims.generateFrameNumbers('background', { start: 43, end: 45 }),
-            frameRate: 7,
+            frameRate: 6,
             repeat: -1,
             forward: false,
         });
