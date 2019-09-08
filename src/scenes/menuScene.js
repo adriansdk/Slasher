@@ -1,6 +1,5 @@
 import logo from "../assets/images/logo.png";
 import background from "../assets/images/background.png";
-// import font1 from '../assets/images/font.TTF';
 
 var animation;
 var button;
@@ -13,7 +12,6 @@ class menuScene extends Phaser.Scene {
 
     preload() {
         this.load.image('logo', logo);
-        // this.load.text('myFont', myFont)
         this.load.spritesheet('background', background, { frameWidth: 1177, frameHeight: 784 });
     }
 
@@ -31,11 +29,11 @@ class menuScene extends Phaser.Scene {
         };
         this.add.sprite(450, 300, "background").setScale(0.79).play(anims.shift()).on("animationcomplete", onAnimationcomplete);
         this.add.image(450, 230, 'logo').setScale(0.2);
-        let startButton = this.add.text(410, 500, "Start", {
+        let startButton = this.add.text(380, 500, "start", {
             fontFamily: "font1",
-            fontSize: 45
+            fontSize: 40
         });
-        startButton.alpha = 0.5;
+        startButton.alpha = 0.7;
         startButton.setInteractive().on("pointerover", () => {
             document.body.style.cursor = "pointer";
             startButton.alpha = 1;
