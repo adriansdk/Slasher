@@ -75,8 +75,6 @@ export default class gameScene extends Phaser.Scene {
         this.physics.add.collider(this.player, topLayer)
         this.physics.add.collider(this.player, objectsLayer)
         direction = 'south'
-        var eae = this.player.body.touching
-        console.log(eae)
 
         // NPCS
         this.zombie = this.physics.add.sprite(200, 500, 'zombie').setScale(0.6);

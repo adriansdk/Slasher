@@ -20,7 +20,6 @@ export default class menuScene extends Phaser.Scene {
         this.createAnims.call(this);
         var anims = ["background", "background2"];
         var onAnimationcomplete = function (anim) {
-            console.log("animationcomplete", anim.key);
             var next = anims.shift();
             if (next) {
                 this.play(next);
@@ -43,7 +42,6 @@ export default class menuScene extends Phaser.Scene {
             startButton.alpha = 0.5;
         }).on("pointerdown", () => {
             document.body.style.cursor = "auto";
-            console.log(this.scene)
             this.scene.start("gameScene");
         });
 
