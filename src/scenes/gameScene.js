@@ -1,4 +1,3 @@
-var player;
 var cursors;
 var direction;
 var zombie;
@@ -7,7 +6,7 @@ var skeleton;
 
 import sky from "../assets/images/sky.png";
 import dude from "../assets/images/player.png";
-import zombieAsset from "../assets/images/zombie.png";   
+import zombieAsset from "../assets/images/zombie.png";
 import skeletonAsset from "../assets/images/skeleton.png";
 import tilesPack1 from "../assets/map/atlas.png";
 import tilesPack2 from "../assets/map/rpgAtlas.png";
@@ -15,8 +14,10 @@ import tilesPack3 from "../assets/map/roguelike.png";
 
 class gameScene extends Phaser.Scene {
     constructor() {
-        super({ key: "gameScene" });
+        super({ key: 'gameScene' });
+        this.player;
     }
+
     preload() {
         this.load.image('sky', sky);
         this.load.spritesheet('dude', dude, { frameWidth: 84, frameHeight: 84 });
@@ -29,6 +30,9 @@ class gameScene extends Phaser.Scene {
     }
 
     create() {
+
+
+
         // MAP
         var map = this.add.tilemap('myMap')
         var tiles = map.addTilesetImage('atlas', 'tiles');
@@ -44,15 +48,31 @@ class gameScene extends Phaser.Scene {
         objectsLayer.setCollisionByProperty({ collide: true })
 
         //PLAYER
-        player = this.physics.add.sprite(665, 205, 'dude');
-        player.setCollideWorldBounds(true);
-        player.setScale(0.55)
-        player.body.setSize(44, 70).setOffset(18, 12)
+        this.player = this.physics.add.sprite(665, 205, 'dude');
+        this.player.setCollideWorldBounds(true);
+        this.player.setScale(0.55)
+        this.player.body.setSize(44, 70).setOffset(18, 12)
 
 
-        this.physics.add.collider(player, riverLayer)
-        this.physics.add.collider(player, topLayer)
-        this.physics.add.collider(player, objectsLayer)
+        this.player.setData('name', 'Slasher')
+        this.player.setData('health', 100)
+        this.player.setData('xp', 0)
+        this.player.setData('gold', 0)
+
+        var text = this.add.text(350, 250, '', { font: '16px font1', fill: '#00ff00' });
+
+        text.setText([
+            'Name: ' + this.player.data.get('name'),
+            'Health: ' + this.player.data.get('health'),
+            'Xp: ' + this.player.data.get('xp') + ' gold',
+            'Gold ' + this.player.data.get('gold')
+        ]);
+
+
+        this.physics.add.collider(this.player, riverLayer)
+        this.physics.add.collider(this.player, topLayer)
+        this.physics.add.collider(this.player, objectsLayer)
+        console.log(this.player)
 
         // NPCS
         zombie = this.physics.add.sprite(200, 500, 'zombie').setScale(0.6);
@@ -63,16 +83,15 @@ class gameScene extends Phaser.Scene {
         zombie.setData('xp', 10)
         zombie.setData('gold', 3)
 
-        console.log(gameObject)
 
-    
+
         skeleton = this.physics.add.sprite(250, 300, 'skeleton').setScale(0.6);
         skeleton.setCollideWorldBounds(true);
 
         //CAMERA
 
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-        this.cameras.main.startFollow(player);
+        this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(2.2);
         this.physics.world.setBounds(0, 0)
 
@@ -152,75 +171,79 @@ class gameScene extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
-
         cursors = this.input.keyboard.createCursorKeys();
+
+    }
+    takeDamage() {
+
     }
     update() {
         // MOVEMENT 
+        
 
         if (cursors.left.isDown) {
             console.log('left')
-            player.setVelocityX(-80);
+            this.player.setVelocityX(-80);
             if (cursors.shift.isDown) {
-                player.setVelocityX(-150);
+                this.player.setVelocityX(-150);
             }
-            player.anims.play('left', true);
+            this.player.anims.play('left', true);
             direction = 'west'
         }
         else if (cursors.right.isDown) {
             console.log('right')
-            player.setVelocityX(80);
+            this.player.setVelocityX(80);
             if (cursors.shift.isDown) {
-                player.setVelocityX(150);
+                this.player.setVelocityX(150);
             }
-            player.anims.play('right', true);
+            this.player.anims.play('right', true);
             direction = 'east'
         }
         else if (cursors.up.isDown) {
             console.log('up')
-            player.setVelocityY(-80);
+            this.player.setVelocityY(-80);
             if (cursors.shift.isDown) {
-                player.setVelocityY(-150);
+                this.player.setVelocityY(-150);
             }
-            player.anims.play('up', true);
+            this.player.anims.play('up', true);
             direction = 'north'
         }
         else if (cursors.down.isDown) {
             console.log('down')
-            player.setVelocityY(80);
+            this.player.setVelocityY(80);
             if (cursors.shift.isDown) {
-                player.setVelocityY(150);
+                this.player.setVelocityY(150);
             }
-            player.anims.play('down', true);
+            this.player.anims.play('down', true);
             direction = 'south'
         }
         else if (cursors.space.isDown) {
-            player.setVelocityY(0);
-            player.setVelocityX(0);
+            this.player.setVelocityY(0);
+            this.player.setVelocityX(0);
             if (direction == 'north') {
-                player.anims.play('attackUp', true);
+                this.player.anims.play('attackUp', true);
             } else if (direction == 'south') {
-                player.anims.play('attackDown', true)
+                this.player.anims.play('attackDown', true)
             } else if (direction == 'east') {
-                player.anims.play('attackRight', true)
+                this.player.anims.play('attackRight', true)
             } else if (direction == 'west') {
-                player.anims.play('attackLeft', true)
+                this.player.anims.play('attackLeft', true)
             }
         } else {
-            player.setVelocityX(0);
-            player.setVelocityY(0);
+            this.player.setVelocityX(0);
+            this.player.setVelocityY(0);
             if (direction == 'north') {
-                player.anims.play('stoppedUp', true);
-                // player.body.setSize(54, 76).setOffset(14, 6)
+                this.player.anims.play('stoppedUp', true);
+                // this.player.body.setSize(54, 76).setOffset(14, 6)
             } else if (direction == 'south') {
-                player.anims.play('stoppedDown', true)
-                // player.body.setSize(54, 76).setOffset(14, 6)
+                this.player.anims.play('stoppedDown', true)
+                // this.player.body.setSize(54, 76).setOffset(14, 6)
             } else if (direction == 'east') {
-                player.anims.play('stoppedRight', true)
-                // player.body.setSize(54, 76).setOffset(14, 6)
+                this.player.anims.play('stoppedRight', true)
+                // this.player.body.setSize(54, 76).setOffset(14, 6)
             } else if (direction == 'west') {
-                player.anims.play('stoppedLeft', true)
-                // player.body.setSize(54, 76).setOffset(14, 6)
+                this.player.anims.play('stoppedLeft', true)
+                // this.player.body.setSize(54, 76).setOffset(14, 6)
             }
         }
     }

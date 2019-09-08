@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import gameScene from "../src/scenes/gameScene"
+import stats from "./scenes/statsScene"
 import menuScene from "../src/scenes/menuScene"
 
 var config = {
@@ -14,7 +15,7 @@ var config = {
       debug: true
     }
   },
-  scene: [menuScene, gameScene]
+  scene: [ menuScene, gameScene, stats ]
 };
 
 var game = new Phaser.Game(config);

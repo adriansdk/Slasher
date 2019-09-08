@@ -5,7 +5,7 @@ var animation;
 var button;
 var startButton;
 
-class menuScene extends Phaser.Scene {
+export default class menuScene extends Phaser.Scene {
     constructor() {
         super({ key: "menuScene" });
     }
@@ -42,6 +42,8 @@ class menuScene extends Phaser.Scene {
             startButton.alpha = 0.5;
         }).on("pointerdown", () => {
             document.body.style.cursor = "auto";
+            console.log(this.scene)
+            this.scene.start("stats");
             this.scene.start("gameScene");
         });
 
@@ -68,5 +70,3 @@ class menuScene extends Phaser.Scene {
 
     }
 }
-
-export default menuScene
