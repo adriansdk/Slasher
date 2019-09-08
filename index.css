@@ -1,22 +1,23 @@
 body{
     margin: 0px;
     padding: 0px;
-    background-color: #004000;
+    background-color: #000;
+    text-align: center;
 }
 h1{
-    color:red;
+    color:white;
     font-size: 40px;
     margin: 0px;
 }
 
 h3{
+    color:white;
     margin: 0px;
 }
 
 canvas{
     border: 5px solid #081510;
     box-shadow: 5px 5px 5px #000;
-    margin-left: 370px;
 }
 
 @font-face {
