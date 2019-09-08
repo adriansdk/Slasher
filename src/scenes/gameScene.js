@@ -47,7 +47,7 @@ class gameScene extends Phaser.Scene {
         player = this.physics.add.sprite(665, 205, 'dude');
         player.setCollideWorldBounds(true);
         player.setScale(0.55)
-        player.body.setSize(54, 76).setOffset(14, 6)
+        player.body.setSize(44, 70).setOffset(18, 12)
 
 
         this.physics.add.collider(player, riverLayer)
