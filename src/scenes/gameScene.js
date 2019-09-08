@@ -10,6 +10,16 @@ var Player = {
     gold: 0,
 }
 
+var Enemies = {
+    zombie: {
+        NAME:'Zombie',
+        hp: 50,
+        damage: 4,
+        exp: 12,
+        gold: 3,
+    },
+}
+
 import { cst } from "../cst"
 import sky from "../assets/images/sky.png";
 import dude from "../assets/images/player.png";
@@ -66,15 +76,7 @@ export default class gameScene extends Phaser.Scene {
         // NPCS
         this.zombie = this.physics.add.sprite(200, 500, 'zombie').setScale(0.6);
         this.zombie.setCollideWorldBounds(true);
-
-        this.zombie.setData('name', 'Zombie')
-        this.zombie.setData('health', 50)
-        this.zombie.setData('xp', 10)
-        this.zombie.setData('gold', 3)
-        
-        damageTaken = 10
-
-
+    
         // skeleton = this.physics.add.sprite(250, 300, 'skeleton').setScale(0.6);
         // skeleton.setCollideWorldBounds(true);
 
@@ -176,18 +178,26 @@ export default class gameScene extends Phaser.Scene {
 
         // STARTING OTHER SCENES AND PASSING DATA TO THEM
 
+            //PLAYER DATA 
         this.player.setData('name', Player.name)
         this.player.setData('health', `${Player.hp}`)
-        this.player.setData('xp', `${Player.exp}`)
-        this.player.setData('xp', `${Player.expToLevel}`)
+        this.player.setData('exp', `${Player.exp}`)
+        this.player.setData('expToLevel', `${Player.expToLevel}`)
         this.player.setData('gold', `${Player.gold}`)
 
+        
+            // ENEMIES DATA
+        this.zombie.setData('name', Enemies.zombie.name)
+        this.zombie.setData('health', `${Enemies.zombie.hp}`)
+        this.zombie.setData('damage', `${Enemies.zombie.damage}`)
+        this.zombie.setData('exp', `${Enemies.zombie.exp}`)
+        this.zombie.setData('gold', `${Enemies.zombie.gold}`)
+        
+            // STARTING UI SCENES
         this.scene.launch('statsScene', this.player)
         this.scene.launch('currentEnemy', this.zombie)
-
-        // MOVEMENT 
         
-
+        // MOVEMENT 
         if (cursors.left.isDown) {
             console.log('left')
             this.player.setVelocityX(-80);

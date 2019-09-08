@@ -19,7 +19,7 @@ class statsScene extends Phaser.Scene {
 
     this.add.text(730, 30, "" + this.player.data.get('name'), { font: '20px font1', fill: '#000' });
     this.add.text(730, 70, 'Health: ' + this.player.data.get('health'), { font: '16px font1', fill: '#000' });
-    this.add.text(730, 90, 'Xp: ' + this.player.data.get('xp') + ' gold', { font: '16px font1', fill: '#000' });
+    this.add.text(730, 90, 'EXP: ' + this.player.data.get('exp') + '/' + this.player.data.get('expToLevel'), { font: '16px font1', fill: '#000' });
     this.add.text(730, 110, 'Gold ' + this.player.data.get('gold'), { font: '16px font1', fill: '#000' });
     
     }
