@@ -32,7 +32,6 @@ export default class gameScene extends Phaser.Scene {
     create() {
 
 
-
         // MAP
         var map = this.add.tilemap('myMap')
         var tiles = map.addTilesetImage('atlas', 'tiles');
@@ -59,20 +58,12 @@ export default class gameScene extends Phaser.Scene {
         this.player.setData('xp', 0)
         this.player.setData('gold', 0)
 
-        var text = this.add.text(350, 250, '', { font: '16px font1', fill: '#00ff00' });
-
-        text.setText([
-            'Name: ' + this.player.data.get('name'),
-            'Health: ' + this.player.data.get('health'),
-            'Xp: ' + this.player.data.get('xp') + ' gold',
-            'Gold ' + this.player.data.get('gold')
-        ]);
 
 
         this.physics.add.collider(this.player, riverLayer)
         this.physics.add.collider(this.player, topLayer)
         this.physics.add.collider(this.player, objectsLayer)
-        console.log(this.player)
+        // console.log(this.player)
 
         // NPCS
         zombie = this.physics.add.sprite(200, 500, 'zombie').setScale(0.6);
@@ -172,6 +163,11 @@ export default class gameScene extends Phaser.Scene {
             repeat: -1
         });
         cursors = this.input.keyboard.createCursorKeys();
+
+
+
+
+        this.scene.launch('statsScene', this.player)
 
     }
     takeDamage() {

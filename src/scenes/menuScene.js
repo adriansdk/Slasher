@@ -44,7 +44,6 @@ export default class menuScene extends Phaser.Scene {
         }).on("pointerdown", () => {
             document.body.style.cursor = "auto";
             console.log(this.scene)
-            this.scene.start("stats");
             this.scene.start("gameScene");
         });
 
