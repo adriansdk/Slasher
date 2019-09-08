@@ -12,7 +12,7 @@ var Player = {
 
 var Enemies = {
     zombie: {
-        NAME:'Zombie',
+        name:'Zombie',
         hp: 50,
         damage: 4,
         exp: 12,
@@ -174,24 +174,22 @@ export default class gameScene extends Phaser.Scene {
         Player.hp = Player.hp - damageTaken
         console.log(Player.hp)
     }
-    update() {
-
-        // STARTING OTHER SCENES AND PASSING DATA TO THEM
-
-            //PLAYER DATA 
+    updateData(){
         this.player.setData('name', Player.name)
         this.player.setData('health', `${Player.hp}`)
         this.player.setData('exp', `${Player.exp}`)
         this.player.setData('expToLevel', `${Player.expToLevel}`)
         this.player.setData('gold', `${Player.gold}`)
-
-        
             // ENEMIES DATA
         this.zombie.setData('name', Enemies.zombie.name)
         this.zombie.setData('health', `${Enemies.zombie.hp}`)
         this.zombie.setData('damage', `${Enemies.zombie.damage}`)
         this.zombie.setData('exp', `${Enemies.zombie.exp}`)
         this.zombie.setData('gold', `${Enemies.zombie.gold}`)
+    }
+    update() {
+        
+        this.updateData();
         
             // STARTING UI SCENES
         this.scene.launch('statsScene', this.player)
