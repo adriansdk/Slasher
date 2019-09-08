@@ -53,7 +53,7 @@ export default class gameScene extends Phaser.Scene {
         this.player.body.setSize(44, 70).setOffset(18, 12)
 
 
-        this.player.setData('name', 'Slasher')
+        this.player.setData('name', 'Adrian')
         this.player.setData('health', 100)
         this.player.setData('xp', 0)
         this.player.setData('gold', 0)
