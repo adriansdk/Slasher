@@ -57,6 +57,15 @@ class gameScene extends Phaser.Scene {
         // NPCS
         zombie = this.physics.add.sprite(200, 500, 'zombie').setScale(0.6);
         zombie.setCollideWorldBounds(true);
+
+        zombie.setData('name', 'Zombie')
+        zombie.setData('health', 50)
+        zombie.setData('xp', 10)
+        zombie.setData('gold', 3)
+
+        console.log(gameObject)
+
+    
         skeleton = this.physics.add.sprite(250, 300, 'skeleton').setScale(0.6);
         skeleton.setCollideWorldBounds(true);
 
