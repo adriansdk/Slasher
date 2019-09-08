@@ -5,11 +5,16 @@ body{
 }
 h1{
     color:red;
+    font-size: 40px;
     margin: 0px;
 }
 
 h3{
     margin: 0px;
+}
+
+canvas{
+    border: 5px solid #081510;
 }
 
 @font-face {

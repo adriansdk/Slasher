@@ -25,7 +25,7 @@ class gameScene extends Phaser.Scene {
         this.load.image('tiles', tilesPack1);
         this.load.image('tiles2', tilesPack2);
         this.load.image('tiles3', tilesPack3);
-        this.load.tilemapTiledJSON('myMap', 'src/assets/map/map.json');
+        this.load.tilemapTiledJSON('myMap', 'src/assets/map/map2.json');
     }
 
     create() {
@@ -44,7 +44,7 @@ class gameScene extends Phaser.Scene {
         objectsLayer.setCollisionByProperty({ collide: true })
 
         //PLAYER
-        player = this.physics.add.sprite(100, 500, 'dude');
+        player = this.physics.add.sprite(665, 205, 'dude');
         player.setCollideWorldBounds(true);
         player.setScale(0.55)
         player.body.setSize(54, 76).setOffset(14, 6)
@@ -55,7 +55,7 @@ class gameScene extends Phaser.Scene {
         this.physics.add.collider(player, objectsLayer)
 
         // NPCS
-        zombie = this.physics.add.sprite(200, 300, 'zombie').setScale(0.6);
+        zombie = this.physics.add.sprite(200, 500, 'zombie').setScale(0.6);
         zombie.setCollideWorldBounds(true);
         skeleton = this.physics.add.sprite(250, 300, 'skeleton').setScale(0.6);
         skeleton.setCollideWorldBounds(true);
