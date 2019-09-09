@@ -8,6 +8,8 @@ var fighting;
 
 var currentEnemy;
 
+var map;
+
 var topLayer;
 var riverLayer;
 var objectsLayer;
@@ -81,7 +83,7 @@ export default class gameScene extends Phaser.Scene {
 
     create() {
         // MAP
-        var map = this.add.tilemap('myMap')
+        map = this.add.tilemap('myMap')
         var tiles = map.addTilesetImage('atlas', 'tiles');
         var tiles2 = map.addTilesetImage('rpgAtlas', 'tiles2');
         var tiles3 = map.addTilesetImage('roguelike', 'tiles3');
@@ -109,25 +111,31 @@ export default class gameScene extends Phaser.Scene {
         this.createZombies();
         console.log(enemies)
 
+        // FIND CURRENT CLOSEST ENEMY
+        this.currentEnemy();
+
 
         // EVENTS 
         this.timeEvent = this.time.addEvent({
             delay: 2000,
-            callback: this.moveenemiesStats,
+            callback: this.moveEnemies,
             loop: -1,
             callbackScope: this
         });
 
 
         //COLLIDERS 
+        this.addColliders()
         this.physics.add.collider(this.player, riverLayer)
         this.physics.add.collider(this.player, topLayer)
         this.physics.add.collider(this.player, objectsLayer)
 
+        
+
         //CAMERA
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(1);
+        this.cameras.main.setZoom(2.2);
         this.physics.world.setBounds(0, 0)
 
         //ANIMATIONS
@@ -212,8 +220,9 @@ export default class gameScene extends Phaser.Scene {
     createSkeleton() {
         if (enemies.length < 8) {
             for (var p = 0; p < 8; p++) {
-                var random = Math.floor(Math.random() * (530 - 200)) + 200
-                enemies.push(new Skeleton(p, random, random, this.physics))
+                var randomX = Math.floor(Math.random() * (map.widthInPixels - 20)) + 200
+                var randomY = Math.floor(Math.random() * (map.heightInPixels - 500)) + 500
+                enemies.push(new Skeleton(p, randomX, randomY, this.physics))
             }
         }
     }
@@ -222,14 +231,15 @@ export default class gameScene extends Phaser.Scene {
     createZombies() {
         if (enemies.length < 12) {
             for (var p = 0; p < 6; p++) {
-                var random = Math.floor(Math.random() * (530 - 200)) + 200
-                enemies.push(new Zombie(p, random, random, this.physics))
+                var randomX = Math.floor(Math.random() * (map.widthInPixels - 20)) + 200
+                var randomY = Math.floor(Math.random() * (map.heightInPixels - 500)) + 500
+                enemies.push(new Zombie(p, randomX, randomY, this.physics))
             }
         }
     }
 
 
-    moveenemiesStats() {
+    moveEnemies() {
         if (enemiesStats.zombie.fighting == false) { // FIX
             for (var i = 0; i < enemies.length; i++) {
                 let randNumber = Math.floor(Math.random() * Math.floor(4));
@@ -261,7 +271,14 @@ export default class gameScene extends Phaser.Scene {
             });
         }
     }
-
+    addColliders(){
+        for(var i = 0; i<enemies.length; i++){
+            this.physics.add.collider(enemies[i].enemy, riverLayer)
+            this.physics.add.collider(enemies[i].enemy, objectsLayer)
+            this.physics.add.collider(enemies[i].enemy, topLayer)
+            this.physics.add.collider(enemies[i].enemy, this.player)
+        }
+    }
     updateData() {
         this.player.setData('name', Player.name)
         this.player.setData('health', `${Player.hp}`)
@@ -319,6 +336,11 @@ export default class gameScene extends Phaser.Scene {
             }
         }
     }
+
+    currentEnemy() {
+        
+    }
+
     playerAttack() {
         if (cursors.space.isDown) {
             this.player.setVelocityY(0);
@@ -327,9 +349,9 @@ export default class gameScene extends Phaser.Scene {
                 this.player.anims.play('attackUp', true);
             } else if (direction == 'south') {
                 this.player.anims.play('attackDown', true)
-            } else if (direction == 'west'){
+            } else if (direction == 'west') {
                 this.player.anims.play('attackLeft', true)
-            } else if (direction == 'east'){
+            } else if (direction == 'east') {
                 this.player.anims.play('attackRight', true)
             }
         }
@@ -373,7 +395,7 @@ export default class gameScene extends Phaser.Scene {
         this.playerAttack();
         // STARTING UI SCENES
         this.scene.launch('statsScene', this.player)
-        this.scene.launch('currentEnemy', {enemy:currentEnemy, isFighting:fighting})
+        this.scene.launch('currentEnemy', { enemy: currentEnemy, isFighting: fighting })
 
         // distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.zombie.x, this.zombie.y)
         //CHECK IF COLLIDING WITH MOBS        
