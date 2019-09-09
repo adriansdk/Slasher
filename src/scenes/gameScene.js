@@ -22,6 +22,11 @@ var Zombie = function (name, x, y, game) {
     this.enemy.body.setCollideWorldBounds(true)
     this.enemy.body.setSize(36, 40).setOffset(0, 27)
     this.enemy.setScale(0.5)
+    this.enemy.setData('name', 'Zombie');
+    this.enemy.setData('hp', '50');
+    this.enemy.setData('damage', '3');
+    this.enemy.setData('exp', '12');
+    this.enemy.setData('gold', '3');
 }
 
 
@@ -32,6 +37,11 @@ var Skeleton = function (name, x, y, game) {
     this.enemy.body.setCollideWorldBounds(true)
     this.enemy.body.setSize(32, 50).setOffset(0, 14)
     this.enemy.setScale(0.5)
+    this.enemy.setData('name', 'Skeleton');
+    this.enemy.setData('hp', '70');
+    this.enemy.setData('damage', '4');
+    this.enemy.setData('exp', '14');
+    this.enemy.setData('gold', '4');
 }
 
 var Player = {
@@ -413,6 +423,7 @@ export default class gameScene extends Phaser.Scene {
     }
     checkCollision(enemy, player) {
         currentEnemy = enemy
+        fighting = true
     }
 
     playerAttack() {
