@@ -1,0 +1,29 @@
+body{
+    margin: 0px;
+    padding: 0px;
+    background-color: rgb(51, 33, 61);
+    text-align: center;
+    font-family: font1;
+}
+h1{
+    color:white;
+    font-size: 50px;
+    margin: 15px 0px 40px 0px;
+}
+
+h3{
+    color:white;
+    margin: 0px;
+}
+
+canvas{
+    border: 5px solid #081510;
+    box-shadow: 5px 5px 5px #000;
+}
+
+@font-face {
+    font-family: font1;
+    src: url('./assets/images/font.TTF');
+    font-weight:400;
+    font-weight:normal;
+  }
