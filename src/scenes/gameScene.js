@@ -20,6 +20,7 @@ var Zombie = function (index, x, y, game) {
     this.enemy.name = index.toString()
     this.enemy.body.setImmovable()
     this.enemy.body.setCollideWorldBounds(true)
+    this.enemy.body.setSize(36, 40).setOffset(0, 27)
     this.enemy.setScale(0.5)
     game.add.collider(this.enemy, this.player, topLayer, riverLayer, objectsLayer)
 }
@@ -30,6 +31,7 @@ var Skeleton = function (index, x, y, game) {
     this.enemy.name = index.toString()
     this.enemy.body.setImmovable()
     this.enemy.body.setCollideWorldBounds(true)
+    this.enemy.body.setSize(32, 50).setOffset(0, 14)
     this.enemy.setScale(0.5)
     game.add.collider(this.enemy, this.player, topLayer, riverLayer, objectsLayer)
 }
@@ -137,7 +139,7 @@ export default class gameScene extends Phaser.Scene {
         //CAMERA
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(1);
+        this.cameras.main.setZoom(2.2);
         this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
 
         //ANIMATIONS
@@ -281,6 +283,7 @@ export default class gameScene extends Phaser.Scene {
             this.physics.add.collider(enemies[i].enemy, this.player)
         }
     }
+
     updateData() {
         this.player.setData('name', Player.name)
         this.player.setData('health', `${Player.hp}`)
