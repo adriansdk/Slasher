@@ -1,9 +1,10 @@
 var cursors;
 var direction;
 var distance;
+var rect;
+var graphics
 
 var enemies;
-
 var fighting;
 
 var currentEnemy;
@@ -91,6 +92,7 @@ export default class gameScene extends Phaser.Scene {
         riverLayer = map.createStaticLayer("River", [tiles, tiles, tiles3], 0, 0);
         topLayer = map.createStaticLayer("Top", [tiles, tiles2, tiles3], 0, 0);
         objectsLayer = map.createStaticLayer("Objects", [tiles, tiles2, tiles3], 0, 0).setDepth(1)
+        
 
         riverLayer.setCollisionByProperty({ collide: true })
         topLayer.setCollisionByProperty({ collide: true })
@@ -135,8 +137,8 @@ export default class gameScene extends Phaser.Scene {
         //CAMERA
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(2.2);
-        this.physics.world.setBounds(0, 0)
+        this.cameras.main.setZoom(1);
+        this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
 
         //ANIMATIONS
         this.anims.create({
@@ -220,8 +222,8 @@ export default class gameScene extends Phaser.Scene {
     createSkeleton() {
         if (enemies.length < 8) {
             for (var p = 0; p < 8; p++) {
-                var randomX = Math.floor(Math.random() * (map.widthInPixels - 20)) + 200
-                var randomY = Math.floor(Math.random() * (map.heightInPixels - 500)) + 500
+                var randomX = Math.floor(Math.random() * (550 - 20)) + 20
+                var randomY = Math.floor(Math.random() * (750 - 500)) + 500
                 enemies.push(new Skeleton(p, randomX, randomY, this.physics))
             }
         }
@@ -231,8 +233,8 @@ export default class gameScene extends Phaser.Scene {
     createZombies() {
         if (enemies.length < 12) {
             for (var p = 0; p < 6; p++) {
-                var randomX = Math.floor(Math.random() * (map.widthInPixels - 20)) + 200
-                var randomY = Math.floor(Math.random() * (map.heightInPixels - 500)) + 500
+                var randomX = Math.floor(Math.random() * (550 - 20)) + 20
+                var randomY = Math.floor(Math.random() * (750 - 500)) + 500
                 enemies.push(new Zombie(p, randomX, randomY, this.physics))
             }
         }
