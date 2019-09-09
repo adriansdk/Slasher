@@ -71,10 +71,6 @@ export default class gameScene extends Phaser.Scene {
         this.player.setScale(0.55)
         this.player.body.setSize(44, 70).setOffset(18, 12)
 
-        this.physics.add.collider(this.player, riverLayer)
-        this.physics.add.collider(this.player, topLayer)
-        this.physics.add.collider(this.player, objectsLayer)
-
         direction = 'south'
 
         // NPCS
@@ -93,8 +89,15 @@ export default class gameScene extends Phaser.Scene {
         // skeleton.setCollideWorldBounds(true);
 
         //COLLIDERS 
+        this.physics.add.collider(this.player, riverLayer)
+        this.physics.add.collider(this.player, topLayer)
+        this.physics.add.collider(this.player, objectsLayer)
+                
+        this.physics.add.collider(this.zombie, riverLayer)
+        this.physics.add.collider(this.zombie, topLayer)
+        this.physics.add.collider(this.zombie, objectsLayer)
+        this.physics.add.collider(this.zombie, this.player)
 
-        this.physics.add.collider(this.player, this.zombie)
         colliding = false
 
         //CAMERA
@@ -223,6 +226,7 @@ export default class gameScene extends Phaser.Scene {
         this.zombie.setData('exp', `${Enemies.zombie.exp}`)
         this.zombie.setData('gold', `${Enemies.zombie.gold}`)
     }
+    
     moveCharacter() {
         if (cursors.left.isDown) {
             this.player.anims.play('left', true);
@@ -299,6 +303,7 @@ export default class gameScene extends Phaser.Scene {
 
         this.updateData();
         this.moveCharacter();
+        this.playerAttack();
         // STARTING UI SCENES
         this.scene.launch('statsScene', this.player)
         this.scene.launch('currentEnemy', this.zombie)
