@@ -15,9 +15,9 @@ var topLayer;
 var riverLayer;
 var objectsLayer;
 
-var Zombie = function (index, x, y, game) {
+var Zombie = function (name, x, y, game) {
     this.enemy = game.add.sprite(x, y, 'zombie')
-    this.enemy.name = index.toString()
+    this.enemy.name = name
     this.enemy.body.setImmovable()
     this.enemy.body.setCollideWorldBounds(true)
     this.enemy.body.setSize(36, 40).setOffset(0, 27)
@@ -25,9 +25,9 @@ var Zombie = function (index, x, y, game) {
 }
 
 
-var Skeleton = function (index, x, y, game) {
+var Skeleton = function (name, x, y, game) {
     this.enemy = game.add.sprite(x, y, 'skeleton')
-    this.enemy.name = index.toString()
+    this.enemy.name = name
     this.enemy.body.setImmovable()
     this.enemy.body.setCollideWorldBounds(true)
     this.enemy.body.setSize(32, 50).setOffset(0, 14)
@@ -101,7 +101,7 @@ export default class gameScene extends Phaser.Scene {
         riverLayer = map.createStaticLayer("River", [tiles, tiles, tiles3], 0, 0);
         topLayer = map.createStaticLayer("Top", [tiles, tiles2, tiles3], 0, 0);
         objectsLayer = map.createStaticLayer("Objects", [tiles, tiles2, tiles3], 0, 0).setDepth(1)
-        
+
 
         riverLayer.setCollisionByProperty({ collide: true })
         topLayer.setCollisionByProperty({ collide: true })
@@ -122,9 +122,8 @@ export default class gameScene extends Phaser.Scene {
         this.createZombies();
         console.log(enemies)
 
-        // FIND CURRENT CLOSEST ENEMY
-        this.currentEnemy();
-
+        //BASE CURRENT ENEMY
+        currentEnemy = this.player
 
         // EVENTS 
         this.timeEvent = this.time.addEvent({
@@ -140,8 +139,6 @@ export default class gameScene extends Phaser.Scene {
         this.physics.add.collider(this.player, riverLayer)
         this.physics.add.collider(this.player, topLayer)
         this.physics.add.collider(this.player, objectsLayer)
-
-        
 
         //CAMERA
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -180,8 +177,6 @@ export default class gameScene extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
-
-
         this.anims.create({
             key: 'right',
             frames: this.anims.generateFrameNumbers('dude', { start: 15, end: 19 }),
@@ -224,6 +219,54 @@ export default class gameScene extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
+        this.anims.create({
+            key: 'zombieUp',
+            frames: this.anims.generateFrameNumbers('zombie', { start: 27, end: 29 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'zombieDown',
+            frames: this.anims.generateFrameNumbers('zombie', { start: 0, end: 2 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'zombieRight',
+            frames: this.anims.generateFrameNumbers('zombie', { start: 19, end: 20 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'zombieLeft',
+            frames: this.anims.generateFrameNumbers('zombie', { start: 9, end: 11 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'skeletonDown',
+            frames: this.anims.generateFrameNumbers('zombie', { start: 3, end: 8 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'skeletonLeft',
+            frames: this.anims.generateFrameNumbers('zombie', { start: 12, end: 17 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'skeletonRight',
+            frames: this.anims.generateFrameNumbers('zombie', { start: 21, end: 26 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'skeletonUp',
+            frames: this.anims.generateFrameNumbers('zombie', { start: 30, end: 35 }),
+            frameRate: 10,
+            repeat: -1
+        });
         cursors = this.input.keyboard.createCursorKeys();
     }
 
@@ -233,7 +276,7 @@ export default class gameScene extends Phaser.Scene {
             for (var p = 0; p < 8; p++) {
                 var randomX = Math.floor(Math.random() * (550 - 20)) + 20
                 var randomY = Math.floor(Math.random() * (750 - 500)) + 500
-                enemies.push(new Skeleton(p, randomX, randomY, this.physics))
+                enemies.push(new Skeleton('skeleton', randomX, randomY, this.physics))
             }
         }
     }
@@ -244,7 +287,7 @@ export default class gameScene extends Phaser.Scene {
             for (var p = 0; p < 6; p++) {
                 var randomX = Math.floor(Math.random() * (550 - 20)) + 20
                 var randomY = Math.floor(Math.random() * (750 - 500)) + 500
-                enemies.push(new Zombie(p, randomX, randomY, this.physics))
+                enemies.push(new Zombie('zombie', randomX, randomY, this.physics))
             }
         }
     }
@@ -252,23 +295,43 @@ export default class gameScene extends Phaser.Scene {
 
     moveEnemies() {
         if (enemiesStats.zombie.fighting == false) { // FIX
-            for (var i = 0; i < enemies.length; i++) {
+            for (var total = 0; total < enemies.length; total++) {
                 let randNumber = Math.floor(Math.random() * Math.floor(4));
                 switch (randNumber) {
                     case 0:
-                        enemies[i].enemy.setVelocityX(25);
+                        enemies[total].enemy.setVelocityX(25);
+                        if (total > 8) {
+                            enemies[total].enemy.anims.play('zombieRight', true);
+                        } else {
+                            enemies[total].enemy.anims.play('skeletonRight', true);
+                        }
                         break;
                     case 1:
-                        enemies[i].enemy.setVelocityX(-25);
+                        enemies[total].enemy.setVelocityX(-25);
+                        if (total > 8) {
+                            enemies[total].enemy.anims.play('zombieLeft', true);
+                        } else {
+                            enemies[total].enemy.anims.play('skeletonLeft', true);
+                        }
                         break;
                     case 2:
-                        enemies[i].enemy.setVelocityY(25);
+                        enemies[total].enemy.setVelocityY(25);
+                        if (total > 8) {
+                            enemies[total].enemy.anims.play('zombieDown', true);
+                        } else {
+                            enemies[total].enemy.anims.play('skeletonDown', true);
+                        }
                         break;
                     case 3:
-                        enemies[i].enemy.setVelocityY(-25);
+                        enemies[total].enemy.setVelocityY(-25);
+                        if (total > 8) {
+                            enemies[total].enemy.anims.play('zombieUp', true);
+                        } else {
+                            enemies[total].enemy.anims.play('skeletonUp', true);
+                        }
                         break;
                     default:
-                        enemies[i].enemy.setVelocityX(30);
+                        enemies[total].enemy.setVelocityX(30);
                 }
             }
             this.time.addEvent({
@@ -282,12 +345,12 @@ export default class gameScene extends Phaser.Scene {
             });
         }
     }
-    addColliders(){
-        for(var i = 0; i<enemies.length; i++){
+    addColliders() {
+        for (var i = 0; i < enemies.length; i++) {
             this.physics.add.collider(enemies[i].enemy, riverLayer)
             this.physics.add.collider(enemies[i].enemy, objectsLayer)
             this.physics.add.collider(enemies[i].enemy, topLayer)
-            this.physics.add.collider(enemies[i].enemy, this.player)
+            this.physics.add.collider(enemies[i].enemy, this.player, this.checkCollision)
         }
     }
 
@@ -348,9 +411,8 @@ export default class gameScene extends Phaser.Scene {
             }
         }
     }
-
-    currentEnemy() {
-        
+    checkCollision(enemy, player) {
+        currentEnemy = enemy
     }
 
     playerAttack() {
@@ -359,44 +421,30 @@ export default class gameScene extends Phaser.Scene {
             this.player.setVelocityX(0);
             if (direction == 'north') {
                 this.player.anims.play('attackUp', true);
+                if (currentEnemy.y < this.player.y && distance < 45) {
+                    enemiesStats.zombie.hp -= Player.damage
+                    enemiesStats.zombie.fighting = true
+                }
             } else if (direction == 'south') {
                 this.player.anims.play('attackDown', true)
+                if (currentEnemy.y > this.player.y && distance < 30) {
+                    enemiesStats.zombie.hp -= Player.damage
+                    enemiesStats.zombie.fighting = true
+                }
             } else if (direction == 'west') {
                 this.player.anims.play('attackLeft', true)
+                if (currentEnemy.x > this.player.x && distance < 30) {
+                    enemiesStats.zombie.hp -= Player.damage
+                    enemiesStats.zombie.fighting = true
+                }
             } else if (direction == 'east') {
                 this.player.anims.play('attackRight', true)
+                if (currentEnemy.x < this.player.x && distance < 30) {
+                    enemiesStats.zombie.hp -= Player.damage
+                    enemiesStats.zombie.fighting = true
+                }
             }
         }
-
-        // if (cursors.space.isDown) {
-        //     this.player.setVelocityY(0);
-        //     this.player.setVelocityX(0);
-        //     if (direction == 'north' && cursors.space.isDown) {
-        //         this.player.anims.play('attackUp', true);
-        //         if (enemies < this.player.y && distance < 45) {
-        //             enemiesStats.zombie.hp -= Player.damage
-        //             enemiesStats.zombie.fighting = true
-        //         }
-        //     } else if (direction == 'south') {
-        //         this.player.anims.play('attackDown', true)
-        //         if (this.zombie.y > this.player.y && distance < 30) {
-        //             enemiesStats.zombie.hp -= Player.damage
-        //             enemiesStats.zombie.fighting = true
-        //         }
-        //     } else if (direction == 'east') {
-        //         this.player.anims.play('attackRight', true)
-        //         if (this.zombie.x > this.player.x && distance < 30) {
-        //             enemiesStats.zombie.hp -= Player.damage
-        //             enemiesStats.zombie.fighting = true
-        //         }
-        //     } else if (direction == 'west') {
-        //         this.player.anims.play('attackLeft', true)
-        //         if (this.zombie.x < this.player.x && distance < 30) {
-        //             enemiesStats.zombie.hp -= Player.damage
-        //             enemiesStats.zombie.fighting = true
-        //         }
-        //     }
-        // }
     }
 
     update() {
@@ -408,8 +456,7 @@ export default class gameScene extends Phaser.Scene {
         // STARTING UI SCENES
         this.scene.launch('statsScene', this.player)
         this.scene.launch('currentEnemy', { enemy: currentEnemy, isFighting: fighting })
-
-        // distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.zombie.x, this.zombie.y)
+        distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, currentEnemy.x, currentEnemy.y)
         //CHECK IF COLLIDING WITH MOBS        
     }
 }
