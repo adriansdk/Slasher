@@ -16,12 +16,12 @@ class currentEnemy extends Phaser.Scene {
     }
     create() {
 
-    if (this.zombie.data.get('health') > 0){
-        this.add.text(730, 230, "" + this.zombie.data.get('name'), { font: '20px Roboto', fill: '#fff' });
-        this.add.text(730, 270, 'Health: ' + this.zombie.data.get('health'), { font: '16px Roboto', fill: '#fff' });
-        this.add.text(730, 290, 'Damage: ' + this.zombie.data.get('damage'), { font: '16px Roboto', fill: '#fff' });
-        this.add.text(730, 310, 'EXP: ' + this.zombie.data.get('exp'), { font: '16px Roboto', fill: '#fff' });
-        this.add.text(730, 330, 'Gold ' + this.zombie.data.get('gold'), { font: '16px Roboto', fill: '#fff' });
+    if (this.zombie.hp > 0){
+        this.add.text(730, 230, "" + this.zombie.name, { font: '20px Roboto', fill: '#fff' });
+        this.add.text(730, 270, 'Health: ' + this.zombie.hp, { font: '16px Roboto', fill: '#fff' });
+        this.add.text(730, 290, 'Damage: ' + this.zombie.damage, { font: '16px Roboto', fill: '#fff' });
+        this.add.text(730, 310, 'EXP: ' + this.zombie.exp, { font: '16px Roboto', fill: '#fff' });
+        this.add.text(730, 330, 'Gold ' + this.zombie.gold, { font: '16px Roboto', fill: '#fff' });
     } else {
         this.add.text(730, 230, "Not Fighting", { font: '20px Roboto', fill: '#fff' });
     }

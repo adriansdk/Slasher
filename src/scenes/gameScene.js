@@ -3,6 +3,7 @@ var direction;
 var damageTaken;
 var colliding;
 var distance;
+var zombies;
 
 var Player = {
     name: 'Adrian',
@@ -76,6 +77,8 @@ export default class gameScene extends Phaser.Scene {
         direction = 'south'
 
         // NPCS
+
+        zombies = this.add.group({key: 'zombie', repeat: 5, x:300, y: 300,})
         this.zombie = this.physics.add.sprite(200, 500, 'zombie').setScale(0.6).setRandomPosition();
         this.zombie.setCollideWorldBounds(true).setImmovable(true);
         this.zombie.body.setSize(36, 40).setOffset(0, 27)
@@ -206,13 +209,13 @@ export default class gameScene extends Phaser.Scene {
                 default:
                     this.zombie.setVelocityX(30);
             }
-            this.time.addEvent({
-                delay: 1500,
-                callback: () => {
-                    this.zombie.setVelocity(0);
-                },
-                callbackScope: this
-            });
+            // this.time.addEvent({
+            //     delay: 1500,
+            //     callback: () => {
+            //         this.zombie.setVelocity(0);
+            //     },
+            //     callbackScope: this
+            // });
         }
     }
 
@@ -320,7 +323,7 @@ export default class gameScene extends Phaser.Scene {
         this.playerAttack();
         // STARTING UI SCENES
         this.scene.launch('statsScene', this.player)
-        this.scene.launch('currentEnemy', this.zombie)
+        this.scene.launch('currentEnemy', Enemies.zombie)
 
         distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.zombie.x, this.zombie.y)
         //CHECK IF COLLIDING WITH MOBS        
