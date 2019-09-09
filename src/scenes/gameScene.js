@@ -1,8 +1,7 @@
 var cursors;
 var direction;
 var distance;
-var rect;
-var graphics
+var enemyHp
 
 var enemies;
 var fighting;
@@ -22,11 +21,11 @@ var Zombie = function (name, x, y, game) {
     this.enemy.body.setCollideWorldBounds(true)
     this.enemy.body.setSize(36, 40).setOffset(0, 27)
     this.enemy.setScale(0.5)
-    this.enemy.setData('name', 'Zombie');
-    this.enemy.setData('hp', '50');
-    this.enemy.setData('damage', '3');
-    this.enemy.setData('exp', '12');
-    this.enemy.setData('gold', '3');
+    this.enemy.setData('name', enemiesStats.zombie.name);
+    this.enemy.setData('hp', enemiesStats.zombie.hp);
+    this.enemy.setData('damage', enemiesStats.zombie.damage);
+    this.enemy.setData('exp', enemiesStats.zombie.exp);
+    this.enemy.setData('gold', enemiesStats.zombie.gold);
 }
 
 
@@ -37,11 +36,11 @@ var Skeleton = function (name, x, y, game) {
     this.enemy.body.setCollideWorldBounds(true)
     this.enemy.body.setSize(32, 50).setOffset(0, 14)
     this.enemy.setScale(0.5)
-    this.enemy.setData('name', 'Skeleton');
-    this.enemy.setData('hp', '70');
-    this.enemy.setData('damage', '4');
-    this.enemy.setData('exp', '14');
-    this.enemy.setData('gold', '4');
+    this.enemy.setData('name', enemiesStats.skeleton.name);
+    this.enemy.setData('hp', enemiesStats.skeleton.hp);
+    this.enemy.setData('damage', enemiesStats.skeleton.damage);
+    this.enemy.setData('exp', enemiesStats.skeleton.exp);
+    this.enemy.setData('gold', enemiesStats.skeleton.gold);
 }
 
 var Player = {
@@ -130,7 +129,6 @@ export default class gameScene extends Phaser.Scene {
         enemies = []
         this.createSkeleton();
         this.createZombies();
-        console.log(enemies)
 
         //BASE CURRENT ENEMY
         currentEnemy = this.player
@@ -142,7 +140,8 @@ export default class gameScene extends Phaser.Scene {
             loop: -1,
             callbackScope: this
         });
-
+        
+    
 
         //COLLIDERS 
         this.addColliders()
@@ -366,16 +365,18 @@ export default class gameScene extends Phaser.Scene {
 
     updateData() {
         this.player.setData('name', Player.name)
-        this.player.setData('health', `${Player.hp}`)
-        this.player.setData('exp', `${Player.exp}`)
-        this.player.setData('expToLevel', `${Player.expToLevel}`)
-        this.player.setData('gold', `${Player.gold}`)
+        this.player.setData('health', Player.hp)
+        this.player.setData('exp', Player.exp)
+        this.player.setData('expToLevel', Player.expToLevel)
+        this.player.setData('gold', Player.gold)
         // ENEMIES DATA
-        // this.zombie.setData('name', enemiesStats.zombie.name)
-        // this.zombie.setData('health', `${enemiesStats.zombie.hp}`)
-        // this.zombie.setData('damage', `${enemiesStats.zombie.damage}`)
-        // this.zombie.setData('exp', `${enemiesStats.zombie.exp}`)
-        // this.zombie.setData('gold', `${enemiesStats.zombie.gold}`)
+        currentEnemy.x
+        currentEnemy.y
+        // currentEnemy.setData('name', enemiesStats.zombie.name)
+        // currentEnemy.setData('health', `${enemiesStats.zombie.hp}`)
+        // currentEnemy.setData('damage', `${enemiesStats.zombie.damage}`)
+        // currentEnemy.setData('exp', `${enemiesStats.zombie.exp}`)
+        // currentEnemy.setData('gold', `${enemiesStats.zombie.gold}`)
     }
 
     moveCharacter() {
@@ -426,33 +427,47 @@ export default class gameScene extends Phaser.Scene {
         fighting = true
     }
 
+    leaveCombat(){
+        if(distance > 150){
+            fighting = false
+        } else if(currentEnemy.getData('hp') <= 0){
+            fighting = false
+            var enemyGold = currentEnemy.getData('gold')
+            console.log(enemyGold)
+            var enemyExp = currentEnemy.getData('exp')
+            currentEnemy.setActive(false)
+            currentEnemy.setVisible(false)
+            Player.gold += enemyGold
+            Player.exp += enemyExp
+            currentEnemy = this.player
+        }
+    }
+
     playerAttack() {
         if (cursors.space.isDown) {
             this.player.setVelocityY(0);
             this.player.setVelocityX(0);
+            enemyHp = currentEnemy.getData('hp')
+            console.log(enemyHp)
             if (direction == 'north') {
                 this.player.anims.play('attackUp', true);
-                if (currentEnemy.y < this.player.y && distance < 45) {
-                    enemiesStats.zombie.hp -= Player.damage
-                    enemiesStats.zombie.fighting = true
+                if (currentEnemy.y < this.player.y && distance < 80 && currentEnemy.getData('hp') > 0) {
+                    currentEnemy.setData('hp', enemyHp) 
                 }
             } else if (direction == 'south') {
                 this.player.anims.play('attackDown', true)
-                if (currentEnemy.y > this.player.y && distance < 30) {
-                    enemiesStats.zombie.hp -= Player.damage
-                    enemiesStats.zombie.fighting = true
+                if (currentEnemy.y > this.player.y && distance < 65 && currentEnemy.getData('hp') > 0) {
+                    currentEnemy.setData('hp', enemyHp)
                 }
             } else if (direction == 'west') {
                 this.player.anims.play('attackLeft', true)
-                if (currentEnemy.x > this.player.x && distance < 30) {
-                    enemiesStats.zombie.hp -= Player.damage
-                    enemiesStats.zombie.fighting = true
+                if (currentEnemy.x > this.player.x && distance < 65 && currentEnemy.getData('hp') > 0) {
+                    currentEnemy.setData('hp', enemyHp)
                 }
             } else if (direction == 'east') {
                 this.player.anims.play('attackRight', true)
-                if (currentEnemy.x < this.player.x && distance < 30) {
-                    enemiesStats.zombie.hp -= Player.damage
-                    enemiesStats.zombie.fighting = true
+                if (currentEnemy.x < this.player.x && distance < 65 && currentEnemy.getData('hp') > 0) {
+                    currentEnemy.setData('hp', enemyHp)
                 }
             }
         }
@@ -464,6 +479,8 @@ export default class gameScene extends Phaser.Scene {
         this.updateData();
         this.moveCharacter();
         this.playerAttack();
+        this.leaveCombat()
+        
         // STARTING UI SCENES
         this.scene.launch('statsScene', this.player)
         this.scene.launch('currentEnemy', { enemy: currentEnemy, isFighting: fighting })
