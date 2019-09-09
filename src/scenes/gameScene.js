@@ -20,6 +20,7 @@ var Enemies = {
         damage: 4,
         exp: 12,
         gold: 3,
+        fighting: false,
     },
 }
 
@@ -92,7 +93,7 @@ export default class gameScene extends Phaser.Scene {
         this.physics.add.collider(this.player, riverLayer)
         this.physics.add.collider(this.player, topLayer)
         this.physics.add.collider(this.player, objectsLayer)
-                
+
         this.physics.add.collider(this.zombie, riverLayer)
         this.physics.add.collider(this.zombie, topLayer)
         this.physics.add.collider(this.zombie, objectsLayer)
@@ -104,7 +105,7 @@ export default class gameScene extends Phaser.Scene {
 
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(1);
+        this.cameras.main.setZoom(2.2);
         this.physics.world.setBounds(0, 0)
 
         //ANIMATIONS
@@ -186,31 +187,32 @@ export default class gameScene extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
     }
     moveEnemies() {
-        let randNumber =  Math.floor(Math.random() * Math.floor(4));
-        switch (randNumber) {
-            case 0:
-                this.zombie.setVelocityX(25);
-                break;
-            case 1:
-                this.zombie.setVelocityX(-25);
-                break;
-            case 2:
-                this.zombie.setVelocityY(25);
-                break;
-            case 3:
-                this.zombie.setVelocityY(-25);
-                break;
-            default:
-                this.zombie.setVelocityX(30);
+        if (Enemies.zombie.fighting == false) {
+            let randNumber = Math.floor(Math.random() * Math.floor(4));
+            switch (randNumber) {
+                case 0:
+                    this.zombie.setVelocityX(25);
+                    break;
+                case 1:
+                    this.zombie.setVelocityX(-25);
+                    break;
+                case 2:
+                    this.zombie.setVelocityY(25);
+                    break;
+                case 3:
+                    this.zombie.setVelocityY(-25);
+                    break;
+                default:
+                    this.zombie.setVelocityX(30);
+            }
+            this.time.addEvent({
+                delay: 1500,
+                callback: () => {
+                    this.zombie.setVelocity(0);
+                },
+                callbackScope: this
+            });
         }
-        this.time.addEvent({
-            delay: 1500,
-            callback: () => {
-              this.zombie.setVelocity(0);
-            },
-            callbackScope: this
-        });
-
     }
 
     updateData() {
@@ -226,7 +228,7 @@ export default class gameScene extends Phaser.Scene {
         this.zombie.setData('exp', `${Enemies.zombie.exp}`)
         this.zombie.setData('gold', `${Enemies.zombie.gold}`)
     }
-    
+
     moveCharacter() {
         if (cursors.left.isDown) {
             this.player.anims.play('left', true);
@@ -268,7 +270,7 @@ export default class gameScene extends Phaser.Scene {
             } else if (direction == 'west') {
                 this.player.anims.play('stoppedLeft', true)
             }
-        } 
+        }
     }
     playerAttack() {
         if (cursors.space.isDown) {
@@ -278,21 +280,25 @@ export default class gameScene extends Phaser.Scene {
                 this.player.anims.play('attackUp', true);
                 if (this.zombie.y < this.player.y && distance < 45) {
                     Enemies.zombie.hp -= Player.damage
+                    Enemies.zombie.fighting = true
                 }
             } else if (direction == 'south') {
                 this.player.anims.play('attackDown', true)
                 if (this.zombie.y > this.player.y && distance < 30) {
                     Enemies.zombie.hp -= Player.damage
+                    Enemies.zombie.fighting = true
                 }
             } else if (direction == 'east') {
                 this.player.anims.play('attackRight', true)
                 if (this.zombie.x > this.player.x && distance < 30) {
                     Enemies.zombie.hp -= Player.damage
+                    Enemies.zombie.fighting = true
                 }
             } else if (direction == 'west') {
                 this.player.anims.play('attackLeft', true)
                 if (this.zombie.x < this.player.x && distance < 30) {
                     Enemies.zombie.hp -= Player.damage
+                    Enemies.zombie.fighting = true
                 }
             }
         }
