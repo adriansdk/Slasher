@@ -22,7 +22,6 @@ var Zombie = function (index, x, y, game) {
     this.enemy.body.setCollideWorldBounds(true)
     this.enemy.body.setSize(36, 40).setOffset(0, 27)
     this.enemy.setScale(0.5)
-    game.add.collider(this.enemy, this.player, topLayer, riverLayer, objectsLayer)
 }
 
 
@@ -33,7 +32,6 @@ var Skeleton = function (index, x, y, game) {
     this.enemy.body.setCollideWorldBounds(true)
     this.enemy.body.setSize(32, 50).setOffset(0, 14)
     this.enemy.setScale(0.5)
-    game.add.collider(this.enemy, this.player, topLayer, riverLayer, objectsLayer)
 }
 
 var Player = {
@@ -52,6 +50,15 @@ var enemiesStats = {
         damage: 4,
         exp: 12,
         gold: 3,
+        fighting: false,
+        alive: true,
+    },
+    skeleton: {
+        name: 'Zombie',
+        hp: 70,
+        damage: 3,
+        exp: 14,
+        gold: 4,
         fighting: false,
         alive: true,
     },
