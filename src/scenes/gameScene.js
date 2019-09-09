@@ -21,6 +21,7 @@ var Enemies = {
         exp: 12,
         gold: 3,
         fighting: false,
+        alive: true,
     },
 }
 
@@ -75,7 +76,7 @@ export default class gameScene extends Phaser.Scene {
         direction = 'south'
 
         // NPCS
-        this.zombie = this.physics.add.sprite(200, 500, 'zombie').setScale(0.6);
+        this.zombie = this.physics.add.sprite(200, 500, 'zombie').setScale(0.6).setRandomPosition();
         this.zombie.setCollideWorldBounds(true).setImmovable(true);
         this.zombie.body.setSize(36, 40).setOffset(0, 27)
 
@@ -105,7 +106,7 @@ export default class gameScene extends Phaser.Scene {
 
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(2.2);
+        this.cameras.main.setZoom(1);
         this.physics.world.setBounds(0, 0)
 
         //ANIMATIONS
@@ -276,6 +277,7 @@ export default class gameScene extends Phaser.Scene {
         if (cursors.space.isDown) {
             this.player.setVelocityY(0);
             this.player.setVelocityX(0);
+            this.isAlive()
             if (direction == 'north' && cursors.space.isDown) {
                 this.player.anims.play('attackUp', true);
                 if (this.zombie.y < this.player.y && distance < 45) {
@@ -303,10 +305,16 @@ export default class gameScene extends Phaser.Scene {
             }
         }
     }
+    isAlive() {
+        if (Enemies.zombie.hp < 0) {
+            Player.exp += Enemies.zombie.exp
+            Player.gold += Enemies.zombie.gold
+            this.zombie.destroy()
+        }
+    }
     update() {
 
         //FUNCTIONS RUNNING AT ALL TIMES
-
         this.updateData();
         this.moveCharacter();
         this.playerAttack();
