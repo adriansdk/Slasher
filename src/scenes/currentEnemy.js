@@ -22,7 +22,7 @@ class currentEnemy extends Phaser.Scene {
     this.add.text(730, 290, 'Damage: ' + this.zombie.data.get('damage'), { font: '16px Roboto', fill: '#fff' });
     this.add.text(730, 310, 'EXP: ' + this.zombie.data.get('exp'), { font: '16px Roboto', fill: '#fff' });
     this.add.text(730, 330, 'Gold ' + this.zombie.data.get('gold'), { font: '16px Roboto', fill: '#fff' });
-    
+        
     }
     update() {
 

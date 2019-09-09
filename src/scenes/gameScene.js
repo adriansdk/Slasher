@@ -74,12 +74,20 @@ export default class gameScene extends Phaser.Scene {
         this.physics.add.collider(this.player, riverLayer)
         this.physics.add.collider(this.player, topLayer)
         this.physics.add.collider(this.player, objectsLayer)
+
         direction = 'south'
 
         // NPCS
         this.zombie = this.physics.add.sprite(200, 500, 'zombie').setScale(0.6);
         this.zombie.setCollideWorldBounds(true).setImmovable(true);
         this.zombie.body.setSize(36, 40).setOffset(0, 27)
+
+        this.timeEvent = this.time.addEvent({
+            delay: 2000,
+            callback: this.moveEnemies,
+            loop: -1,
+            callbackScope: this
+        });
 
         // skeleton = this.physics.add.sprite(250, 300, 'skeleton').setScale(0.6);
         // skeleton.setCollideWorldBounds(true);
@@ -93,7 +101,7 @@ export default class gameScene extends Phaser.Scene {
 
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(2.2);
+        this.cameras.main.setZoom(1);
         this.physics.world.setBounds(0, 0)
 
         //ANIMATIONS
@@ -174,6 +182,33 @@ export default class gameScene extends Phaser.Scene {
         });
         cursors = this.input.keyboard.createCursorKeys();
     }
+    moveEnemies() {
+        let randNumber =  Math.floor(Math.random() * Math.floor(4));
+        switch (randNumber) {
+            case 0:
+                this.zombie.setVelocityX(25);
+                break;
+            case 1:
+                this.zombie.setVelocityX(-25);
+                break;
+            case 2:
+                this.zombie.setVelocityY(25);
+                break;
+            case 3:
+                this.zombie.setVelocityY(-25);
+                break;
+            default:
+                this.zombie.setVelocityX(30);
+        }
+        this.time.addEvent({
+            delay: 1500,
+            callback: () => {
+              this.zombie.setVelocity(0);
+            },
+            callbackScope: this
+        });
+
+    }
 
     updateData() {
         this.player.setData('name', Player.name)
@@ -229,7 +264,7 @@ export default class gameScene extends Phaser.Scene {
             } else if (direction == 'west') {
                 this.player.anims.play('stoppedLeft', true)
             }
-        }
+        } 
     }
     playerAttack() {
         if (cursors.space.isDown) {
@@ -237,22 +272,22 @@ export default class gameScene extends Phaser.Scene {
             this.player.setVelocityX(0);
             if (direction == 'north' && cursors.space.isDown) {
                 this.player.anims.play('attackUp', true);
-                if (this.zombie.y < this.player.y && distance < 50) {
+                if (this.zombie.y < this.player.y && distance < 45) {
                     Enemies.zombie.hp -= Player.damage
                 }
             } else if (direction == 'south') {
                 this.player.anims.play('attackDown', true)
-                if (this.zombie.y > this.player.y && distance < 50) {
+                if (this.zombie.y > this.player.y && distance < 30) {
                     Enemies.zombie.hp -= Player.damage
                 }
             } else if (direction == 'east') {
                 this.player.anims.play('attackRight', true)
-                if (this.zombie.x > this.player.x && distance < 50) {
+                if (this.zombie.x > this.player.x && distance < 30) {
                     Enemies.zombie.hp -= Player.damage
                 }
             } else if (direction == 'west') {
                 this.player.anims.play('attackLeft', true)
-                if (this.zombie.x < this.player.x && distance < 50) {
+                if (this.zombie.x < this.player.x && distance < 30) {
                     Enemies.zombie.hp -= Player.damage
                 }
             }
@@ -264,11 +299,9 @@ export default class gameScene extends Phaser.Scene {
 
         this.updateData();
         this.moveCharacter();
-        this.playerAttack();
         // STARTING UI SCENES
         this.scene.launch('statsScene', this.player)
         this.scene.launch('currentEnemy', this.zombie)
-
 
         distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.zombie.x, this.zombie.y)
         //CHECK IF COLLIDING WITH MOBS        
