@@ -448,26 +448,25 @@ export default class gameScene extends Phaser.Scene {
             this.player.setVelocityY(0);
             this.player.setVelocityX(0);
             enemyHp = currentEnemy.getData('hp')
-            console.log(enemyHp)
             if (direction == 'north') {
                 this.player.anims.play('attackUp', true);
                 if (currentEnemy.y < this.player.y && distance < 80 && currentEnemy.getData('hp') > 0) {
-                    currentEnemy.setData('hp', enemyHp) 
+                    currentEnemy.setData('hp', enemyHp - Player.damage) 
                 }
             } else if (direction == 'south') {
                 this.player.anims.play('attackDown', true)
                 if (currentEnemy.y > this.player.y && distance < 65 && currentEnemy.getData('hp') > 0) {
-                    currentEnemy.setData('hp', enemyHp)
+                    currentEnemy.setData('hp', enemyHp - Player.damage) 
                 }
             } else if (direction == 'west') {
                 this.player.anims.play('attackLeft', true)
                 if (currentEnemy.x > this.player.x && distance < 65 && currentEnemy.getData('hp') > 0) {
-                    currentEnemy.setData('hp', enemyHp)
+                    currentEnemy.setData('hp', enemyHp - Player.damage) 
                 }
             } else if (direction == 'east') {
                 this.player.anims.play('attackRight', true)
                 if (currentEnemy.x < this.player.x && distance < 65 && currentEnemy.getData('hp') > 0) {
-                    currentEnemy.setData('hp', enemyHp)
+                    currentEnemy.setData('hp', enemyHp - Player.damage) 
                 }
             }
         }
